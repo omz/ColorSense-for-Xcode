@@ -10,7 +10,7 @@ This is where ColorSense comes in: When you put the caret on one of your colors,
 
 The plugin also adds some items to the _Edit_ menu to insert colors and to disable color highlighting temporarily. These menu items have no keyboard shortcuts by default, but you can set them via the system's keyboard preferences (Xcode's own preferences won't show them).
 
-<iframe width="853" height="480" src="http://www.youtube.com/embed/eblRfDQM0Go" frameborder="0" allowfullscreen></iframe>
+[Watch Demo Video (YouTube)](http://www.youtube.com/watch?v=eblRfDQM0Go)
 
 ## Installation
 
