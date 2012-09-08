@@ -433,7 +433,7 @@
 			}
 		}
 		if (!colorString) {
-			if (red == green && green == blue) {
+			if (fabs(red - green) < 0.001 && fabs(green - blue) < 0.001) {
 				if (colorType == OMColorTypeUIRGBA || colorType == OMColorTypeUIWhite || colorType == OMColorTypeUIConstant) {
 					colorString = [NSString stringWithFormat:@"[UIColor colorWithWhite:%.3f alpha:%.3f]", red, alpha];
 				} else if (colorType == OMColorTypeUIRGBAInit || colorType == OMColorTypeUIWhiteInit) {
