@@ -388,11 +388,11 @@
 				double white = [[text substringWithRange:[result rangeAtIndex:2]] doubleValue];
 				double alpha = [[text substringWithRange:[result rangeAtIndex:3]] doubleValue];
 				if ([deviceOrCalibrated isEqualToString:@"Device"]) {
-					foundColor = [NSColor colorWithCalibratedWhite:white alpha:alpha];
-					foundColorType = OMColorTypeNSWhiteCalibrated;
-				} else {
 					foundColor = [NSColor colorWithDeviceWhite:white alpha:alpha];
 					foundColorType = OMColorTypeNSWhiteDevice;
+				} else {
+					foundColor = [NSColor colorWithCalibratedWhite:white alpha:alpha];
+					foundColorType = OMColorTypeNSWhiteCalibrated;
 				}
 				foundColorRange = colorRange;
 				*stop = YES;
