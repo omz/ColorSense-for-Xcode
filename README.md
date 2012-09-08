@@ -16,6 +16,8 @@ The plugin also adds some items to the _Edit_ menu to insert colors and to disab
 
 Simply build the Xcode project and restart Xcode. The plugin will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. To uninstall, just remove the plugin from there (and restart Xcode).
 
+If you get a "Permission Denied" error while building, please see [this issue](https://github.com/omz/ColorSense-for-Xcode/issues/1).
+
 ## Limitations
 
 * It only works for constant colors, something like `[UIColor colorWithWhite:foo * bar + 1 alpha:baz]` won't work.
