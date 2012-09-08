@@ -212,7 +212,7 @@
 			NSColor *matchedColor = [self colorInText:line selectedRange:selectedRangeInLine type:&colorType matchedRange:&colorRange];
 			
 			if (matchedColor) {
-				NSColor *backgroundColor = self.textView.backgroundColor;
+				NSColor *backgroundColor = [self.textView.backgroundColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
 				CGFloat r = 1.0; CGFloat g = 1.0; CGFloat b = 1.0;
 				[backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
 				CGFloat backgroundLuminance = (r + g + b) / 3.0;
