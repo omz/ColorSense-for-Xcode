@@ -22,7 +22,7 @@ If you get a "Permission Denied" error while building, please see [this issue](h
 
 * It only works for constant colors, something like `[UIColor colorWithWhite:foo * bar + 1 alpha:baz]` won't work.
 
-* Only RGB colors and named colors, like `redColor`, are supported at the moment.
+* Only RGB (`colorWithRed:green:blue:alpha:`), grayscale (`colorWithWhite:alpha:`), and named colors (`redColor`...) are supported at the moment (no HSB or CMYK).
 
 ## License
 
