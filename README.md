@@ -23,6 +23,8 @@ Simply build the Xcode project and restart Xcode. The plugin will automatically 
 
 If you get a "Permission Denied" error while building, please see [this issue](https://github.com/omz/ColorSense-for-Xcode/issues/1).
 
+This is tested on OS X 10.8 with Xcode 4.1.1. It [probably doesn't work](https://github.com/omz/ColorSense-for-Xcode/issues/6) on 10.7.
+
 ## Limitations
 
 * It only works for constant colors, something like `[UIColor colorWithWhite:foo * bar + 1 alpha:baz]` won't work.
