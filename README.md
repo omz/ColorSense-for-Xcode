@@ -14,6 +14,9 @@ The plugin also adds some items to the _Edit_ menu to insert colors and to disab
 
 I'm [@olemoritz](http://twitter.com/olemoritz) on Twitter.
 
+<a href="http://flattr.com/thing/879121/omzColorSense-for-Xcode-on-GitHub" target="_blank">
+<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
+
 ## Installation
 
 Simply build the Xcode project and restart Xcode. The plugin will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. To uninstall, just remove the plugin from there (and restart Xcode).
