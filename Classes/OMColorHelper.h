@@ -59,5 +59,6 @@ BOOL OMColorTypeIsNSColor(OMColorType colorType) { return colorType >= OMColorTy
 - (void)deactivateColorHighlighting;
 - (NSColor *)colorInText:(NSString *)text selectedRange:(NSRange)selectedRange type:(OMColorType *)type matchedRange:(NSRangePointer)matchedRange;
 - (NSString *)colorStringForColor:(NSColor *)color withType:(OMColorType)colorType;
+- (double)dividedValue:(double)value withDivisorRange:(NSRange)divisorRange inString:(NSString *)text;
 
 @end
