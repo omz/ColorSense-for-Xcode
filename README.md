@@ -23,7 +23,7 @@ Simply build the Xcode project and restart Xcode. The plugin will automatically 
 
 If you get a "Permission Denied" error while building, please see [this issue](https://github.com/omz/ColorSense-for-Xcode/issues/1).
 
-This is tested on OS X 10.8 with Xcode 4.1.1.
+This is tested on OS X 10.8 with Xcode 4.4.1 and 4.5.
 
 ## Limitations
 
