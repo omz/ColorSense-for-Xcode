@@ -49,8 +49,9 @@
 								 [NSColor purpleColor], @"purple",
 								 [NSColor brownColor], @"brown",
 								 [[NSColor clearColor] colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]], @"clear", nil];
-		
 		_rgbaUIColorRegex = [[NSRegularExpression regularExpressionWithPattern:@"(\\[\\s*UIColor\\s+colorWith|\\[\\s*\\[\\s*UIColor\\s+alloc\\]\\s*initWith)Red:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+green:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+blue:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL] retain];
+
+		_hsvaUIColorRegex = [[NSRegularExpression regularExpressionWithPattern:@"(\\[\\s*UIColor\\s+colorWith|\\[\\s*\\[\\s*UIColor\\s+alloc\\]\\s*initWith)Hue:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+saturation:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+brightness:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL] retain];
 		_whiteUIColorRegex = [[NSRegularExpression regularExpressionWithPattern:@"(\\[\\s*UIColor\\s+colorWith|\\[\\s*\\[\\s*UIColor\\s+alloc\\]\\s*initWith)White:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL] retain];
 		_rgbaNSColorRegex = [[NSRegularExpression regularExpressionWithPattern:@"\\[\\s*NSColor\\s+colorWith(Calibrated|Device)Red:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+green:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+blue:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL] retain];
 		_whiteNSColorRegex = [[NSRegularExpression regularExpressionWithPattern:@"\\[\\s*NSColor\\s+colorWith(Calibrated|Device)White:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL] retain];
@@ -349,7 +350,36 @@
 			}
 		}];
 	}
-	
+
+    if (!foundColor) {
+		[_hsvaUIColorRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+			NSRange colorRange = [result range];
+			if (selectedRange.location >= colorRange.location && NSMaxRange(selectedRange) <= NSMaxRange(colorRange)) {
+				NSString *typeIndicator = [text substringWithRange:[result rangeAtIndex:1]];
+				if ([typeIndicator rangeOfString:@"init"].location != NSNotFound) {
+					foundColorType = OMColorTypeUIHSVAInit;
+				} else {
+					foundColorType = OMColorTypeUIHSVA;
+				}
+
+                double hue = [[text substringWithRange:[result rangeAtIndex:2]] doubleValue];
+                hue = [self dividedValue:hue withDivisorRange:[result rangeAtIndex:3] inString:text];
+
+                double saturation = [[text substringWithRange:[result rangeAtIndex:4]] doubleValue];
+                saturation = [self dividedValue:saturation withDivisorRange:[result rangeAtIndex:5] inString:text];
+
+                double brightness = [[text substringWithRange:[result rangeAtIndex:6]] doubleValue];
+                brightness = [self dividedValue:brightness withDivisorRange:[result rangeAtIndex:7] inString:text];
+
+                double alpha = [[text substringWithRange:[result rangeAtIndex:8]] doubleValue];
+                alpha = [self dividedValue:alpha withDivisorRange:[result rangeAtIndex:9] inString:text];
+
+                foundColor = [NSColor colorWithCalibratedHue:hue saturation:saturation brightness:brightness alpha:alpha];
+                foundColorRange = colorRange;
+				*stop = YES;
+			}
+		}];
+	}
 	if (!foundColor) {
 		[_constantColorRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 			NSRange colorRange = [result range];
@@ -453,9 +483,11 @@
 {
 	NSString *colorString = nil;
 	CGFloat red = -1.0; CGFloat green = -1.0; CGFloat blue = -1.0; CGFloat alpha = -1.0;
+	CGFloat hue = -1.0; CGFloat saturation = -1.0; CGFloat brightness = -1.0;
 	color = [color colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
 	[color getRed:&red green:&green blue:&blue alpha:&alpha];
-		
+    [color getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
+
 	if (red >= 0) {
 		for (NSString *colorName in _constantColorsByName) {
 			NSColor *constantColor = [_constantColorsByName objectForKey:colorName];
@@ -490,7 +522,11 @@
 					colorString = [NSString stringWithFormat:@"[NSColor colorWithCalibratedRed:%.3f green:%.3f blue:%.3f alpha:%.3f]", red, green, blue, alpha];
 				} else if (colorType == OMColorTypeNSRGBADevice || colorType == OMColorTypeNSWhiteDevice) {
 					colorString = [NSString stringWithFormat:@"[NSColor colorWithDeviceRed:%.3f green:%.3f blue:%.3f alpha:%.3f]", red, green, blue, alpha];
-				}
+				} else if (colorType == OMColorTypeUIHSVA) {
+                    colorString = [NSString stringWithFormat:@"[UIColor colorWithHue:%0.3f saturation:%0.3f brightness:%0.3f alpha:%0.3f]", hue, saturation, brightness, alpha];
+				} else if (colorType == OMColorTypeUIHSVAInit) {
+                    colorString = [NSString stringWithFormat:@"[[UIColor alloc] initWithHue:%0.3f saturation:%0.3f brightness:%0.3f alpha:%0.3f]", hue, saturation, brightness, alpha];
+                }
 			}
 		}
 	}
