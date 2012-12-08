@@ -39,13 +39,6 @@ BOOL OMColorTypeIsNSColor(OMColorType colorType) { return colorType >= OMColorTy
 	NSRange _selectedColorRange;
 	OMColorType _selectedColorType;
 	NSTextView *_textView;
-	NSDictionary *_constantColorsByName;
-	
-	NSRegularExpression *_rgbaUIColorRegex;
-	NSRegularExpression *_rgbaNSColorRegex;
-	NSRegularExpression *_whiteNSColorRegex;
-	NSRegularExpression *_whiteUIColorRegex;
-	NSRegularExpression *_constantColorRegex;
 	NSRegularExpression *_stringRegex;
 }
 
