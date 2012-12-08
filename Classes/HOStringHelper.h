@@ -30,12 +30,12 @@ BOOL OMColorTypeIsNSColor(OMColorType colorType) { return colorType >= OMColorTy
 
 //TODO: Maybe support HSB and CMYK color types...
 
-@class OMColorFrameView, OMPlainColorWell;
+@class HOColorFrameView, HOPlainColorWell;
 
-@interface OMColorHelper : NSObject {
+@interface HOStringHelper : NSObject {
 	
-	OMPlainColorWell *_colorWell;
-	OMColorFrameView *_colorFrameView;
+	HOPlainColorWell *_colorWell;
+	HOColorFrameView *_colorFrameView;
 	NSRange _selectedColorRange;
 	OMColorType _selectedColorType;
 	NSTextView *_textView;
@@ -46,10 +46,11 @@ BOOL OMColorTypeIsNSColor(OMColorType colorType) { return colorType >= OMColorTy
 	NSRegularExpression *_whiteNSColorRegex;
 	NSRegularExpression *_whiteUIColorRegex;
 	NSRegularExpression *_constantColorRegex;
+	NSRegularExpression *_stringRegex;
 }
 
-@property (nonatomic, retain) OMPlainColorWell *colorWell;
-@property (nonatomic, retain) OMColorFrameView *colorFrameView;
+@property (nonatomic, retain) HOPlainColorWell *colorWell;
+@property (nonatomic, retain) HOColorFrameView *colorFrameView;
 @property (nonatomic, retain) NSTextView *textView;
 @property (nonatomic, assign) NSRange selectedColorRange;
 @property (nonatomic, assign) OMColorType selectedColorType;

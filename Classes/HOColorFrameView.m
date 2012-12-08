@@ -6,9 +6,9 @@
 //
 //
 
-#import "OMColorFrameView.h"
+#import "HOColorFrameView.h"
 
-@implementation OMColorFrameView
+@implementation HOColorFrameView
 
 @synthesize color=_color;
 

@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.omz-software.${PRODUCT_NAME:identifier}</string>
+	<string>it.holtwick.${PRODUCT_NAME:identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -19,12 +19,12 @@
 	<key>CFBundleVersion</key>
 	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>NSPrincipalClass</key>
-	<string>OMColorHelper</string>
+	<string>HOStringHelper</string>
+	<key>XC4Compatible</key>
+	<true/>
 	<key>XCGCReady</key>
 	<true/>
 	<key>XCPluginHasUI</key>
 	<false/>
-	<key>XC4Compatible</key>
-	<true/>
 </dict>
 </plist>

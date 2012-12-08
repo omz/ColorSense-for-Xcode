@@ -8,23 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		7F2EB89C145057F200E97A87 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2EB899145057EA00E97A87 /* AppKit.framework */; };
-		7F6EE2BF15FA6F3B00BA114A /* OMColorFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6EE2BE15FA6F3B00BA114A /* OMColorFrameView.m */; };
-		7FDADE3A15FA6CA400A847E3 /* OMPlainColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FDADE3915FA6CA400A847E3 /* OMPlainColorWell.m */; };
+		7F6EE2BF15FA6F3B00BA114A /* HOColorFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6EE2BE15FA6F3B00BA114A /* HOColorFrameView.m */; };
+		7FDADE3A15FA6CA400A847E3 /* HOPlainColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FDADE3915FA6CA400A847E3 /* HOPlainColorWell.m */; };
 		DA1B5D020E64686800921439 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089C1672FE841209C02AAC07 /* Foundation.framework */; };
-		DA37E2DC0E6291C8001BDFEF /* OMColorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA37E2DB0E6291C8001BDFEF /* OMColorHelper.m */; };
+		DA37E2DC0E6291C8001BDFEF /* HOStringHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA37E2DB0E6291C8001BDFEF /* HOStringHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		089C1672FE841209C02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		7F2B355F15FA59D000DB3249 /* OMColorHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OMColorHelper.h; sourceTree = "<group>"; };
+		7F2B355F15FA59D000DB3249 /* HOStringHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOStringHelper.h; sourceTree = "<group>"; };
 		7F2EB899145057EA00E97A87 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		7F6EE2BD15FA6F3B00BA114A /* OMColorFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMColorFrameView.h; sourceTree = "<group>"; };
-		7F6EE2BE15FA6F3B00BA114A /* OMColorFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMColorFrameView.m; sourceTree = "<group>"; };
-		7FDADE3815FA6CA400A847E3 /* OMPlainColorWell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMPlainColorWell.h; sourceTree = "<group>"; };
-		7FDADE3915FA6CA400A847E3 /* OMPlainColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMPlainColorWell.m; sourceTree = "<group>"; };
-		8D5B49B6048680CD000E48DA /* OMColorSense.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OMColorSense.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F6EE2BD15FA6F3B00BA114A /* HOColorFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOColorFrameView.h; sourceTree = "<group>"; };
+		7F6EE2BE15FA6F3B00BA114A /* HOColorFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOColorFrameView.m; sourceTree = "<group>"; };
+		7FDADE3815FA6CA400A847E3 /* HOPlainColorWell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPlainColorWell.h; sourceTree = "<group>"; };
+		7FDADE3915FA6CA400A847E3 /* HOPlainColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOPlainColorWell.m; sourceTree = "<group>"; };
+		8D5B49B6048680CD000E48DA /* HOStringSense.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HOStringSense.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DA37E2DB0E6291C8001BDFEF /* OMColorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMColorHelper.m; sourceTree = "<group>"; };
+		DA37E2DB0E6291C8001BDFEF /* HOStringHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOStringHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +48,7 @@
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
 			);
+			indentWidth = 4;
 			name = QuietXcode;
 			sourceTree = "<group>";
 		};
@@ -71,7 +72,7 @@
 		19C28FB8FE9D52D311CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D5B49B6048680CD000E48DA /* OMColorSense.xcplugin */,
+				8D5B49B6048680CD000E48DA /* HOStringSense.xcplugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -79,12 +80,12 @@
 		7F411B0C15FABAC6002F77B6 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				7F2B355F15FA59D000DB3249 /* OMColorHelper.h */,
-				DA37E2DB0E6291C8001BDFEF /* OMColorHelper.m */,
-				7F6EE2BD15FA6F3B00BA114A /* OMColorFrameView.h */,
-				7F6EE2BE15FA6F3B00BA114A /* OMColorFrameView.m */,
-				7FDADE3815FA6CA400A847E3 /* OMPlainColorWell.h */,
-				7FDADE3915FA6CA400A847E3 /* OMPlainColorWell.m */,
+				7F2B355F15FA59D000DB3249 /* HOStringHelper.h */,
+				DA37E2DB0E6291C8001BDFEF /* HOStringHelper.m */,
+				7F6EE2BD15FA6F3B00BA114A /* HOColorFrameView.h */,
+				7F6EE2BE15FA6F3B00BA114A /* HOColorFrameView.m */,
+				7FDADE3815FA6CA400A847E3 /* HOPlainColorWell.h */,
+				7FDADE3915FA6CA400A847E3 /* HOPlainColorWell.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -92,9 +93,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D5B49AC048680CD000E48DA /* OMColorSense */ = {
+		8D5B49AC048680CD000E48DA /* HOStringSense */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "OMColorSense" */;
+			buildConfigurationList = 1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "HOStringSense" */;
 			buildPhases = (
 				8D5B49B1048680CD000E48DA /* Sources */,
 				8D5B49B3048680CD000E48DA /* Frameworks */,
@@ -103,10 +104,10 @@
 			);
 			dependencies = (
 			);
-			name = OMColorSense;
+			name = HOStringSense;
 			productInstallPath = "$(HOME)/Library/Bundles";
 			productName = QuietXcode;
-			productReference = 8D5B49B6048680CD000E48DA /* OMColorSense.xcplugin */;
+			productReference = 8D5B49B6048680CD000E48DA /* HOStringSense.xcplugin */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -117,7 +118,7 @@
 			attributes = {
 				LastUpgradeCheck = 0440;
 			};
-			buildConfigurationList = 1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "OMColorSense" */;
+			buildConfigurationList = 1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "HOStringSense" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -131,7 +132,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D5B49AC048680CD000E48DA /* OMColorSense */,
+				8D5B49AC048680CD000E48DA /* HOStringSense */,
 			);
 		};
 /* End PBXProject section */
@@ -141,9 +142,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA37E2DC0E6291C8001BDFEF /* OMColorHelper.m in Sources */,
-				7FDADE3A15FA6CA400A847E3 /* OMPlainColorWell.m in Sources */,
-				7F6EE2BF15FA6F3B00BA114A /* OMColorFrameView.m in Sources */,
+				DA37E2DC0E6291C8001BDFEF /* HOStringHelper.m in Sources */,
+				7FDADE3A15FA6CA400A847E3 /* HOPlainColorWell.m in Sources */,
+				7F6EE2BF15FA6F3B00BA114A /* HOColorFrameView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,7 +167,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "/Library/Application Support/Developer/Shared/Xcode/Plug-ins";
 				LD_RUNPATH_SEARCH_PATHS = /Developer;
-				PRODUCT_NAME = OMColorSense;
+				PRODUCT_NAME = HOStringSense;
 				STRIP_INSTALLED_PRODUCT = NO;
 				WRAPPER_EXTENSION = xcplugin;
 			};
@@ -190,7 +191,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "OMColorSense" */ = {
+		1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "HOStringSense" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB913B08733D840010E9CD /* Debug */,
@@ -198,7 +199,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "OMColorSense" */ = {
+		1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "HOStringSense" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB913F08733D840010E9CD /* Debug */,

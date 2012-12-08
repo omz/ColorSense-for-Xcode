@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface OMColorFrameView : NSView {
+@interface HOColorFrameView : NSView {
 
 	NSColor *_color;
 }

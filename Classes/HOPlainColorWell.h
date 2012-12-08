@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface OMPlainColorWell : NSColorWell {
+@interface HOPlainColorWell : NSColorWell {
 
 	NSColor *_strokeColor;
 }

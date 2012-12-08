@@ -6,9 +6,9 @@
 //
 //
 
-#import "OMPlainColorWell.h"
+#import "HOPlainColorWell.h"
 
-@implementation OMPlainColorWell
+@implementation HOPlainColorWell
 
 @synthesize strokeColor=_strokeColor;
 
