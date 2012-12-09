@@ -5,12 +5,12 @@
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 
-@class HOStringFrameView, HOStringInfoButton, HOStringViewController;
+@class HOStringFrameView, HOStringInfoButton, HOPopoverViewController;
 
-@interface HOStringHelper : NSObject {
-    HOStringViewController *_stringViewController;
+@interface HOStringHelper : NSObject <NSPopoverDelegate> {
 	HOStringInfoButton *_stringButton;
 	HOStringFrameView *_stringFrameView;
+    HOPopoverViewController *_stringPopoverViewController;
 	NSRange _selectedStringRange;
 	NSString *_selectedStringContent;
 	NSTextView *_textView;

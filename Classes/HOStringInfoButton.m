@@ -8,7 +8,7 @@
 
 - (id)initWithFrame:(NSRect)frameRect {
     if(self = [super initWithFrame:frameRect]) {
-        self.title = @"view plain";
+        self.title = @"plain";
         self.bordered = NO;
     }
     return self;

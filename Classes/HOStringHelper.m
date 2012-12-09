@@ -278,18 +278,40 @@
 //    return (NSString *)json;
 //}
 
-- (void)colorDidChange:(id)sender
-{
-	if (self.selectedStringRange.location == NSNotFound) {
+//- (void)colorDidChange:(id)sender
+//{
+//	if (self.selectedStringRange.location == NSNotFound) {
+//		return;
+//	}
+//    // FIXME:dholtwick:2012-12-09 -
+//	NSString *colorString = self.selectedStringContent;
+//	if (colorString) {
+//		[self.textView.undoManager beginUndoGrouping];
+//		[self.textView insertText:colorString replacementRange:self.selectedStringRange];
+//		[self.textView.undoManager endUndoGrouping];
+//	}
+//}
+
+- (void)popoverWillClose:(NSNotification *)notification {
+    if (self.selectedStringRange.location == NSNotFound) {
 		return;
 	}
-    // FIXME:dholtwick:2012-12-09 -
-	NSString *colorString = self.selectedStringContent;
-	if (colorString) {
-		[self.textView.undoManager beginUndoGrouping];
-		[self.textView insertText:colorString replacementRange:self.selectedStringRange];
+
+    NSTextField *textfield = (id)_stringPopoverViewController.view;
+    
+
+    id data = [NSJSONSerialization dataWithJSONObject:@[textfield.stringValue]
+                                              options:0
+                                                error:NULL];
+    NSString *back = [[NSString alloc] initWithData:data
+                                           encoding:NSUTF8StringEncoding];
+    back = [back substringWithRange:NSMakeRange(2, back.length - 4)];
+    if(back && ![back isEqualToString:_selectedStringContent]) {
+        [self.textView.undoManager beginUndoGrouping];
+		[self.textView insertText:[NSString stringWithFormat:@"@\"%@\"", back]
+                 replacementRange:self.selectedStringRange];
 		[self.textView.undoManager endUndoGrouping];
-	}
+    }
 }
 
 - (void)showPopover:(id)sender {
@@ -297,15 +319,18 @@
     id value =
     [NSJSONSerialization JSONObjectWithData:[s dataUsingEncoding:NSUTF8StringEncoding]
                                     options:NSJSONReadingAllowFragments
-                                      error:NULL]; 
-    HOPopoverViewController *vc = [[[HOPopoverViewController alloc] init] autorelease];
-    NSTextField *textfield = (id)vc.view;
+                                      error:NULL];
+    if(!_stringPopoverViewController) {
+        _stringPopoverViewController = [[[HOPopoverViewController alloc] init] autorelease];
+    }
+    NSTextField *textfield = (id)_stringPopoverViewController.view;
     textfield.stringValue = value;
     textfield.font = self.textView.font;
     NSSize size = NSMakeSize(self.textView.bounds.size.width * 0.75, 120);
     NSPopover *popover = [[NSPopover alloc] init];
-    popover.contentViewController = vc;
+    popover.contentViewController = _stringPopoverViewController;
     popover.contentSize = size;
+    popover.delegate = self;
     [popover showRelativeToRect:self.stringButton.bounds
                          ofView:self.stringButton
                   preferredEdge:NSMinYEdge];
@@ -360,6 +385,7 @@
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_stringPopoverViewController release];
     [_selectedStringContent release];
 	[_stringButton release];
 	[_stringFrameView release];
