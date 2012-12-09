@@ -7,8 +7,8 @@
 //
 
 #import "HOStringHelper.h"
-#import "HOPlainColorWell.h"
-#import "HOColorFrameView.h"
+#import "HOStringInfoButton.h"
+#import "HOStringFrameView.h"
 #import "HOPopoverViewController.h"
 
 #define kOMColorHelperHighlightingDisabled	@"OMColorHelperHighlightingDisabled"
@@ -261,20 +261,20 @@
 
 #pragma mark - View Initialization
 
-- (HOPlainColorWell *)colorWell
+- (HOStringInfoButton *)colorWell
 {
 	if (!_colorWell) {
-		_colorWell = [[HOPlainColorWell alloc] initWithFrame:NSMakeRect(0, 0, 50, 30)];
+		_colorWell = [[HOStringInfoButton alloc] initWithFrame:NSMakeRect(0, 0, 50, 30)];
 		[_colorWell setTarget:self];
 		[_colorWell setAction:@selector(showPopover:)];
 	}
 	return _colorWell;
 }
 
-- (HOColorFrameView *)colorFrameView
+- (HOStringFrameView *)colorFrameView
 {
 	if (!_colorFrameView) {
-		_colorFrameView = [[HOColorFrameView alloc] initWithFrame:NSZeroRect];
+		_colorFrameView = [[HOStringFrameView alloc] initWithFrame:NSZeroRect];
 	}
 	return _colorFrameView;
 }

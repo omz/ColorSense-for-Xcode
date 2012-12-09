@@ -6,18 +6,10 @@
 
 @implementation HOPopoverViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Initialization code here.
-    }
-    
-    return self;
-}
-
 - (NSView *)view {
     NSTextField *textfield = [[[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
+    textfield.focusRingType = NSFocusRingTypeNone;
+    textfield.bordered = NO;
     [super setView:textfield];
     return [super view];
 }

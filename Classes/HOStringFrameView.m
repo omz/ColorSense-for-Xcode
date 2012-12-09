@@ -6,9 +6,9 @@
 //
 //
 
-#import "HOColorFrameView.h"
+#import "HOStringFrameView.h"
 
-@implementation HOColorFrameView
+@implementation HOStringFrameView
 
 @synthesize color=_color;
 

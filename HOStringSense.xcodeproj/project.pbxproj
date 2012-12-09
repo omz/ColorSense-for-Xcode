@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		43BA8625167490550002C238 /* HOPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43BA8624167490550002C238 /* HOPopoverViewController.m */; };
 		7F2EB89C145057F200E97A87 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2EB899145057EA00E97A87 /* AppKit.framework */; };
-		7F6EE2BF15FA6F3B00BA114A /* HOColorFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6EE2BE15FA6F3B00BA114A /* HOColorFrameView.m */; };
-		7FDADE3A15FA6CA400A847E3 /* HOPlainColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FDADE3915FA6CA400A847E3 /* HOPlainColorWell.m */; };
+		7F6EE2BF15FA6F3B00BA114A /* HOStringFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6EE2BE15FA6F3B00BA114A /* HOStringFrameView.m */; };
+		7FDADE3A15FA6CA400A847E3 /* HOStringInfoButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FDADE3915FA6CA400A847E3 /* HOStringInfoButton.m */; };
 		DA1B5D020E64686800921439 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089C1672FE841209C02AAC07 /* Foundation.framework */; };
 		DA37E2DC0E6291C8001BDFEF /* HOStringHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA37E2DB0E6291C8001BDFEF /* HOStringHelper.m */; };
 /* End PBXBuildFile section */
@@ -33,10 +33,10 @@
 		43BA8624167490550002C238 /* HOPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOPopoverViewController.m; sourceTree = "<group>"; };
 		7F2B355F15FA59D000DB3249 /* HOStringHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOStringHelper.h; sourceTree = "<group>"; };
 		7F2EB899145057EA00E97A87 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		7F6EE2BD15FA6F3B00BA114A /* HOColorFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOColorFrameView.h; sourceTree = "<group>"; };
-		7F6EE2BE15FA6F3B00BA114A /* HOColorFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOColorFrameView.m; sourceTree = "<group>"; };
-		7FDADE3815FA6CA400A847E3 /* HOPlainColorWell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPlainColorWell.h; sourceTree = "<group>"; };
-		7FDADE3915FA6CA400A847E3 /* HOPlainColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOPlainColorWell.m; sourceTree = "<group>"; };
+		7F6EE2BD15FA6F3B00BA114A /* HOStringFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOStringFrameView.h; sourceTree = "<group>"; };
+		7F6EE2BE15FA6F3B00BA114A /* HOStringFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOStringFrameView.m; sourceTree = "<group>"; };
+		7FDADE3815FA6CA400A847E3 /* HOStringInfoButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOStringInfoButton.h; sourceTree = "<group>"; };
+		7FDADE3915FA6CA400A847E3 /* HOStringInfoButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOStringInfoButton.m; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* HOStringSense.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HOStringSense.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA37E2DB0E6291C8001BDFEF /* HOStringHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOStringHelper.m; sourceTree = "<group>"; };
@@ -97,10 +97,10 @@
 			children = (
 				7F2B355F15FA59D000DB3249 /* HOStringHelper.h */,
 				DA37E2DB0E6291C8001BDFEF /* HOStringHelper.m */,
-				7F6EE2BD15FA6F3B00BA114A /* HOColorFrameView.h */,
-				7F6EE2BE15FA6F3B00BA114A /* HOColorFrameView.m */,
-				7FDADE3815FA6CA400A847E3 /* HOPlainColorWell.h */,
-				7FDADE3915FA6CA400A847E3 /* HOPlainColorWell.m */,
+				7F6EE2BD15FA6F3B00BA114A /* HOStringFrameView.h */,
+				7F6EE2BE15FA6F3B00BA114A /* HOStringFrameView.m */,
+				7FDADE3815FA6CA400A847E3 /* HOStringInfoButton.h */,
+				7FDADE3915FA6CA400A847E3 /* HOStringInfoButton.m */,
 				43BA8623167490550002C238 /* HOPopoverViewController.h */,
 				43BA8624167490550002C238 /* HOPopoverViewController.m */,
 			);
@@ -172,8 +172,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA37E2DC0E6291C8001BDFEF /* HOStringHelper.m in Sources */,
-				7FDADE3A15FA6CA400A847E3 /* HOPlainColorWell.m in Sources */,
-				7F6EE2BF15FA6F3B00BA114A /* HOColorFrameView.m in Sources */,
+				7FDADE3A15FA6CA400A847E3 /* HOStringInfoButton.m in Sources */,
+				7F6EE2BF15FA6F3B00BA114A /* HOStringFrameView.m in Sources */,
 				43BA8625167490550002C238 /* HOPopoverViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
