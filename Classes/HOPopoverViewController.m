@@ -7,11 +7,17 @@
 @implementation HOPopoverViewController
 
 - (NSView *)view {
-    NSTextField *textfield = [[[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
-    textfield.focusRingType = NSFocusRingTypeNone;
-    textfield.bordered = NO;
-    [super setView:textfield];
-    return [super view];
+    if(!_textField) {
+        _textField = [[[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
+        _textField.focusRingType = NSFocusRingTypeNone;
+        _textField.bordered = NO;
+    }
+    return _textField;
+}
+
+- (void)dealloc {
+    [_textField release];
+    [super dealloc];
 }
 
 @end

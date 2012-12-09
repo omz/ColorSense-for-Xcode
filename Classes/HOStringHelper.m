@@ -1,9 +1,5 @@
 //
-//  OMColorHelper.m
-//  OMColorHelper
-//
-//  Created by Ole Zorn on 09/07/12.
-//
+//  Copyright 2012 Dirk Holtwick, holtwick.it. All rights reserved.
 //
 
 #import "HOStringHelper.h"
@@ -143,37 +139,37 @@
 
 #pragma mark - Color Insertion
 
-- (void)insertColor:(id)sender
-{
-	if (!self.textView) {
-		NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
-		if ([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]) {
-			self.textView = (NSTextView *)firstResponder;
-		} else {
-			NSBeep();
-			return;
-		}
-	}
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:kOMColorHelperHighlightingDisabled]) {
-		//Inserting a color implicitly activates color highlighting:
-		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kOMColorHelperHighlightingDisabled];
-		[self activateColorHighlighting];
-	}
-	[self.textView.undoManager beginUndoGrouping];
-	NSInteger insertionMode = [[NSUserDefaults standardUserDefaults] integerForKey:kOMColorHelperInsertionMode];
-	if (insertionMode == 0) {
-		[self.textView insertText:@"[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0]" replacementRange:self.textView.selectedRange];
-	} else {
-		[self.textView insertText:@"[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0]" replacementRange:self.textView.selectedRange];
-	}
-	[self.textView.undoManager endUndoGrouping];
-	[self performSelector:@selector(activateColorWell) withObject:nil afterDelay:0.0];
-}
+//- (void)insertColor:(id)sender
+//{
+//	if (!self.textView) {
+//		NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
+//		if ([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]) {
+//			self.textView = (NSTextView *)firstResponder;
+//		} else {
+//			NSBeep();
+//			return;
+//		}
+//	}
+//	if ([[NSUserDefaults standardUserDefaults] boolForKey:kOMColorHelperHighlightingDisabled]) {
+//		//Inserting a color implicitly activates color highlighting:
+//		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kOMColorHelperHighlightingDisabled];
+//		[self activateColorHighlighting];
+//	}
+//	[self.textView.undoManager beginUndoGrouping];
+//	NSInteger insertionMode = [[NSUserDefaults standardUserDefaults] integerForKey:kOMColorHelperInsertionMode];
+//	if (insertionMode == 0) {
+//		[self.textView insertText:@"[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0]" replacementRange:self.textView.selectedRange];
+//	} else {
+//		[self.textView insertText:@"[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0]" replacementRange:self.textView.selectedRange];
+//	}
+//	[self.textView.undoManager endUndoGrouping];
+//	[self performSelector:@selector(activateColorWell) withObject:nil afterDelay:0.0];
+//}
 
-- (void)activateColorWell
-{
-	// [self.colorWell activate:YES];
-}
+//- (void)activateColorWell
+//{
+//	// [self.colorWell activate:YES];
+//}
 
 #pragma mark - Text Selection Handling
 
@@ -184,7 +180,6 @@
 
 		BOOL disabled = [[NSUserDefaults standardUserDefaults] boolForKey:kOMColorHelperHighlightingDisabled];
 		if (disabled) return;
-        NSLog(@"1");
 		NSArray *selectedRanges = [self.textView selectedRanges];
 		if (selectedRanges.count >= 1) {
 			NSRange selectedRange = [[selectedRanges objectAtIndex:0] rangeValue];
@@ -192,16 +187,15 @@
 			NSRange lineRange = [text lineRangeForRange:selectedRange];
 			NSRange selectedRangeInLine = NSMakeRange(selectedRange.location - lineRange.location, selectedRange.length);
 			NSString *line = [text substringWithRange:lineRange];
-            NSLog(@"2");
 
 			NSRange colorRange = NSMakeRange(NSNotFound, 0);
             self.selectedStringContent = [self stringInText:line selectedRange:selectedRangeInLine matchedRange:&colorRange];
 			if (_selectedStringContent) {
+                self.selectedStringContent = [_selectedStringContent substringWithRange:NSMakeRange(2, _selectedStringContent.length - 3)];
 				NSColor *backgroundColor = [self.textView.backgroundColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
 				CGFloat r = 1.0; CGFloat g = 1.0; CGFloat b = 1.0;
 				[backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
 				CGFloat backgroundLuminance = (r + g + b) / 3.0;
-                NSLog(@"3");
 
 				NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:0.2 alpha:1.0] : [NSColor whiteColor];
 
@@ -210,8 +204,6 @@
 				NSRect selectionRectInWindow = [self.textView.window convertRectFromScreen:selectionRectOnScreen];
 				NSRect selectionRectInView = [self.textView convertRect:selectionRectInWindow fromView:nil];
 				NSRect colorWellRect = NSMakeRect(NSMaxX(selectionRectInView) - 49, NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
-
-                NSLog(@"4 %@ %@", self.stringButton, self.stringFrameView);
 
 				self.stringButton.frame = NSIntegralRect(colorWellRect);
 				[self.textView addSubview:self.stringButton];
@@ -240,6 +232,52 @@
 	self.selectedStringContent = nil;
 }
 
+//- (NSString *)escapeString:(NSString *) {
+//    NSMutableString *json = [NSMutableString string];
+//    [json appendString:@"\""];
+//
+//    if(!kEscapeChars) {
+//        kEscapeChars = [NSMutableCharacterSet characterSetWithRange:NSMakeRange(0,32)];
+//        [kEscapeChars addCharactersInString: @"\"\\"];
+//    }
+//
+//    NSRange esc = [self rangeOfCharacterFromSet:kEscapeChars];
+//    if ( !esc.length ) {
+//        // No special chars -- can just add the raw string:
+//        [json appendString:self];
+//
+//    }
+//    else {
+//        NSUInteger length = [self length];
+//        for (NSUInteger i = 0; i < length; i++) {
+//            unichar uc = [self characterAtIndex:i];
+//            switch (uc) {
+//                case '"':   [json appendString:@"\\\""];       break;
+//                case '\'':  [json appendString:@"\\\'"];       break;
+//                    // case '%':  [json appendString:@"\\%"];        break;
+//                case '\\':  [json appendString:@"\\\\"];       break;
+//                case '\t':  [json appendString:@"\\t"];        break;
+//                case '\n':  [json appendString:@"\\n"];        break;
+//                case '\r':  [json appendString:@"\\r"];        break;
+//                case '\b':  [json appendString:@"\\b"];        break;
+//                case '\f':  [json appendString:@"\\f"];        break;
+//                default: {
+//                    if (uc < 0x20) {
+//                        [json appendFormat:@"\\u%04x", uc];
+//                    }
+//                    else {
+//                        CFStringAppendCharacters((__bridge CFMutableStringRef)json, &uc, 1);
+//                    }
+//                }
+//                    break;
+//            }
+//        }
+//    }
+//
+//    [json appendString:@"\""];
+//    return (NSString *)json;
+//}
+
 - (void)colorDidChange:(id)sender
 {
 	if (self.selectedStringRange.location == NSNotFound) {
@@ -255,9 +293,15 @@
 }
 
 - (void)showPopover:(id)sender {
+    NSString *s = [NSString stringWithFormat:@"\"%@\"", _selectedStringContent];
+    id value =
+    [NSJSONSerialization JSONObjectWithData:[s dataUsingEncoding:NSUTF8StringEncoding]
+                                    options:NSJSONReadingAllowFragments
+                                      error:NULL]; 
     HOPopoverViewController *vc = [[[HOPopoverViewController alloc] init] autorelease];
     NSTextField *textfield = (id)vc.view;
-    textfield.stringValue = self.selectedStringContent;
+    textfield.stringValue = value;
+    textfield.font = self.textView.font;
     NSSize size = NSMakeSize(self.textView.bounds.size.width * 0.75, 120);
     NSPopover *popover = [[NSPopover alloc] init];
     popover.contentViewController = vc;
@@ -272,7 +316,7 @@
 - (HOStringInfoButton *)stringButton
 {
 	if (!_stringButton) {
-		_stringButton = [[HOStringInfoButton alloc] initWithFrame:NSMakeRect(0, 0, 50, 30)];
+		_stringButton = [[HOStringInfoButton alloc] initWithFrame:NSMakeRect(0, 0, 100, 30)];
 		[_stringButton setTarget:self];
 		[_stringButton setAction:@selector(showPopover:)];
 	}
@@ -296,7 +340,7 @@
 	[_stringRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 		NSRange colorRange = [result range];
 		if (selectedRange.location >= colorRange.location && NSMaxRange(selectedRange) <= NSMaxRange(colorRange)) {
-			foundStringContent = [text substringWithRange:[result rangeAtIndex:1]];
+			foundStringContent = [text substringWithRange:[result rangeAtIndex:0]];
 			foundColorRange = colorRange;
 			*stop = YES;
 		}
@@ -311,22 +355,12 @@
     return nil;
 }
 
-- (double)dividedValue:(double)value withDivisorRange:(NSRange)divisorRange inString:(NSString *)text
-{
-	if (divisorRange.location != NSNotFound) {
-		double divisor = [[[text substringWithRange:divisorRange] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/ "]] doubleValue];
-		if (divisor != 0) {
-			value /= divisor;
-		}
-	}
-	return value;
-}
-
 #pragma mark -
 
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_selectedStringContent release];
 	[_stringButton release];
 	[_stringFrameView release];
 	[_textView release];

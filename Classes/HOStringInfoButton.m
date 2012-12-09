@@ -8,7 +8,7 @@
 
 - (id)initWithFrame:(NSRect)frameRect {
     if(self = [super initWithFrame:frameRect]) {
-        self.title = @"open";
+        self.title = @"view plain";
         self.bordered = NO;
     }
     return self;
@@ -17,7 +17,7 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
 	[NSGraphicsContext saveGraphicsState];
-	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(0, -5, self.bounds.size.width, self.bounds.size.height + 5) xRadius:5.0 yRadius:5.0];
+	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(0, -5, self.bounds.size.width, self.bounds.size.height + 5) xRadius:0.0 yRadius:0.0];
 	[path addClip];
 
     {

@@ -27,6 +27,5 @@
 - (void)activateColorHighlighting;
 - (void)deactivateColorHighlighting;
 - (NSString *)stringInText:(NSString *)text selectedRange:(NSRange)selectedRange matchedRange:(NSRangePointer)matchedRange;
-- (double)dividedValue:(double)value withDivisorRange:(NSRange)divisorRange inString:(NSString *)text;
 
 @end

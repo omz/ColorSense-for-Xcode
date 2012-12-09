@@ -4,6 +4,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface HOPopoverViewController : NSViewController
+@interface HOPopoverViewController : NSViewController {
+    NSTextField *_textField;
+}
 
 @end
