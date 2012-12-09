@@ -6,12 +6,15 @@ Edit strings like `@"Hello\nWorld!"` unescaped.
 
 ![Screenshot](https://github.com/holtwick/HOStringSense-for-Xcode/raw/master/Xcode.png "Example")
 
-
 ## Installation
 
-Simply build the Xcode project and restart Xcode. The plugin will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. @"Hello\nWorld!"st remove the plugin from there (and restart Xcode).
+Simply build the Xcode project and restart Xcode. The plugin will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. First remove the plugin from there (and restart Xcode).
 
 If you get a "Permission Denied" error while building, please see [this issue](https://github.com/omz/ColorSense-for-Xcode/issues/1).
+
+## Author
+
+I'm a Mac and iOS developer, follow me on Twitter [@holtwick](https://twitter.com/holtwick) or ADN [@ho](https://alpha.app.net/ho).
 
 ## Credits
 

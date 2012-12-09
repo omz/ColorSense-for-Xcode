@@ -372,7 +372,6 @@
 			*stop = YES;
 		}
 	}];
-    NSLog(@"Found %@", foundStringContent);
     if (foundStringContent) {
 		if (matchedRange != NULL) {
 			*matchedRange = foundColorRange;
