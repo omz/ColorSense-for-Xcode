@@ -1,14 +1,12 @@
 //
-//  OMColorFrameView.m
-//  OMColorHelper
-//
-//  Created by Ole Zorn on 09/07/12.
-//
+//  HOStringSense by Dirk Holtwick 2012, holtwick.it
+//  Based on OMColorSense by by Ole Zorn, 2012
+//  Licensed under BSD style license
 //
 
-#import "OMColorFrameView.h"
+#import "HOStringFrameView.h"
 
-@implementation OMColorFrameView
+@implementation HOStringFrameView
 
 @synthesize color=_color;
 
