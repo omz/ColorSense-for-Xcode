@@ -2,9 +2,9 @@
 
 ## Overview
 
-Edit strings like @"Hello\nWorld!" unescaped.
+Edit strings like `@"Hello\nWorld!"` unescaped.
 
-![Screenshot](https://github.com/holtwick/ColorSense-for-Xcode/raw/master/Xcode.png "Example")
+![Screenshot](https://github.com/holtwick/HOStringSense-for-Xcode/raw/master/Xcode.png "Example")
 
 
 ## Installation
