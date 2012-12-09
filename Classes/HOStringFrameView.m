@@ -1,9 +1,5 @@
 //
-//  OMColorFrameView.m
-//  OMColorHelper
-//
-//  Created by Ole Zorn on 09/07/12.
-//
+//  Copyright 2012 Dirk Holtwick, holtwick.it. All rights reserved.
 //
 
 #import "HOStringFrameView.h"

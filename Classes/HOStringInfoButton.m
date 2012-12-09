@@ -19,7 +19,13 @@
 	[NSGraphicsContext saveGraphicsState];
 	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(0, -5, self.bounds.size.width, self.bounds.size.height + 5) xRadius:5.0 yRadius:5.0];
 	[path addClip];
-    [super drawRect:dirtyRect];
+
+    {
+        [[NSColor grayColor] setFill];
+        NSRectFill(self.bounds);
+        [super drawRect:dirtyRect];
+    }
+
 	// [self drawWellInside:self.bounds];
 	[NSGraphicsContext restoreGraphicsState];
 	
