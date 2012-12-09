@@ -13,6 +13,7 @@
 	HOStringInfoButton *_stringButton;
 	HOStringFrameView *_stringFrameView;
     HOPopoverViewController *_stringPopoverViewController;
+    NSPopover *_stringPopover;
 	NSRange _selectedStringRange;
 	NSString *_selectedStringContent;
 	NSTextView *_textView;
@@ -25,7 +26,7 @@
 @property (nonatomic, assign) NSRange selectedStringRange;
 @property (nonatomic, copy) NSString *selectedStringContent;
 
-- (void)dismissColorWell;
+- (void)dismissPopover;
 - (void)activateColorHighlighting;
 - (void)deactivateColorHighlighting;
 - (NSString *)stringInText:(NSString *)text selectedRange:(NSRange)selectedRange matchedRange:(NSRangePointer)matchedRange;

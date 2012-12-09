@@ -9,8 +9,7 @@
 #import "HOStringFrameView.h"
 #import "HOPopoverViewController.h"
 
-#define kOMColorHelperHighlightingDisabled	@"OMColorHelperHighlightingDisabled"
-#define kOMColorHelperInsertionMode			@"OMColorHelperInsertionMode"
+#define kHOStringHelperHighlightingDisabled	@"HOStringHelperHighlightingDisabled"
 
 @implementation HOStringHelper
 
@@ -45,76 +44,51 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
-    //	NSMenuItem *editMenuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
-    //	if (editMenuItem) {
-    //		[[editMenuItem submenu] addItem:[NSMenuItem separatorItem]];
-    //
-    //		NSMenuItem *toggleColorHighlightingMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Show Colors Under Caret" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""] autorelease];
-    //		[toggleColorHighlightingMenuItem setTarget:self];
-    //		[[editMenuItem submenu] addItem:toggleColorHighlightingMenuItem];
-    //
-    //		NSMenuItem *colorInsertionModeItem = [[[NSMenuItem alloc] initWithTitle:@"Color Insertion Mode" action:nil keyEquivalent:@""] autorelease];
-    //		NSMenuItem *colorInsertionModeNSItem = [[[NSMenuItem alloc] initWithTitle:@"NSColor" action:@selector(selectNSColorInsertionMode:) keyEquivalent:@""] autorelease];
-    //		[colorInsertionModeNSItem setTarget:self];
-    //		NSMenuItem *colorInsertionModeUIItem = [[[NSMenuItem alloc] initWithTitle:@"UIColor" action:@selector(selectUIColorInsertionMode:) keyEquivalent:@""] autorelease];
-    //		[colorInsertionModeUIItem setTarget:self];
-    //
-    //		NSMenu *colorInsertionModeMenu = [[[NSMenu alloc] initWithTitle:@"Color Insertion Mode"] autorelease];
-    //		[colorInsertionModeItem setSubmenu:colorInsertionModeMenu];
-    //		[[colorInsertionModeItem submenu] addItem:colorInsertionModeUIItem];
-    //		[[colorInsertionModeItem submenu] addItem:colorInsertionModeNSItem];
-    //		[[editMenuItem submenu] addItem:colorInsertionModeItem];
-    //
-    //		NSMenuItem *insertColorMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Insert Color..." action:@selector(insertColor:) keyEquivalent:@""] autorelease];
-    //		[insertColorMenuItem setTarget:self];
-    //		[[editMenuItem submenu] addItem:insertColorMenuItem];
-    //	}
-    //
-    //	BOOL highlightingEnabled = ![[NSUserDefaults standardUserDefaults] boolForKey:kOMColorHelperHighlightingDisabled];
-    //	if (highlightingEnabled) {
-    [self activateColorHighlighting];
-    //	}
+	NSMenuItem *editMenuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
+	if (editMenuItem) {
+		[[editMenuItem submenu] addItem:[NSMenuItem separatorItem]];
+
+		NSMenuItem *toggleColorHighlightingMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Show Strings Under Caret" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""] autorelease];
+		[toggleColorHighlightingMenuItem setTarget:self];
+		[[editMenuItem submenu] addItem:toggleColorHighlightingMenuItem];
+
+
+        //		NSMenuItem *insertColorMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Insert Color..." action:@selector(insertColor:) keyEquivalent:@""] autorelease];
+        //		[insertColorMenuItem setTarget:self];
+        //		[[editMenuItem submenu] addItem:insertColorMenuItem];
+	}
+
+	BOOL highlightingEnabled = ![[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
+	if (highlightingEnabled) {
+        [self activateColorHighlighting];
+	}
 }
 
 #pragma mark - Preferences
 
-//- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
-//{
-//	if ([menuItem action] == @selector(insertColor:)) {
-//		NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
-//		return ([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]);
-//	} else if ([menuItem action] == @selector(toggleColorHighlightingEnabled:)) {
-//		BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kOMColorHelperHighlightingDisabled];
-//		[menuItem setState:enabled ? NSOffState : NSOnState];
-//		return YES;
-//	} else if ([menuItem action] == @selector(selectNSColorInsertionMode:)) {
-//		[menuItem setState:[[NSUserDefaults standardUserDefaults] integerForKey:kOMColorHelperInsertionMode] == 1 ? NSOnState : NSOffState];
-//	} else if ([menuItem action] == @selector(selectUIColorInsertionMode:)) {
-//		[menuItem setState:[[NSUserDefaults standardUserDefaults] integerForKey:kOMColorHelperInsertionMode] == 0 ? NSOnState : NSOffState];
-//	}
-//	return YES;
-//}
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+	if ([menuItem action] == @selector(insertColor:)) {
+		NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
+		return ([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]);
+	} else if ([menuItem action] == @selector(toggleColorHighlightingEnabled:)) {
+		BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
+		[menuItem setState:enabled ? NSOffState : NSOnState];
+		return YES;
+    }
+	return YES;
+}
 
-//- (void)selectNSColorInsertionMode:(id)sender
-//{
-//	[[NSUserDefaults standardUserDefaults] setInteger:1 forKey:kOMColorHelperInsertionMode];
-//}
-
-//- (void)selectUIColorInsertionMode:(id)sender
-//{
-//	[[NSUserDefaults standardUserDefaults] setInteger:0 forKey:kOMColorHelperInsertionMode];
-//}
-
-//- (void)toggleColorHighlightingEnabled:(id)sender
-//{
-//	BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kOMColorHelperHighlightingDisabled];
-//	[[NSUserDefaults standardUserDefaults] setBool:!enabled forKey:kOMColorHelperHighlightingDisabled];
-//	if (enabled) {
-//		[self activateColorHighlighting];
-//	} else {
-//		[self deactivateColorHighlighting];
-//	}
-//}
+- (void)toggleColorHighlightingEnabled:(id)sender
+{
+	BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
+	[[NSUserDefaults standardUserDefaults] setBool:!enabled forKey:kHOStringHelperHighlightingDisabled];
+	if (enabled) {
+		[self activateColorHighlighting];
+	} else {
+		[self deactivateColorHighlighting];
+	}
+}
 
 - (void)activateColorHighlighting
 {
@@ -135,43 +109,9 @@
 - (void)deactivateColorHighlighting
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSTextViewDidChangeSelectionNotification object:nil];
-	[self dismissColorWell];
-	// self.textView = nil;
+	[self dismissPopover];
+	self.textView = nil;
 }
-
-#pragma mark - Color Insertion
-
-//- (void)insertColor:(id)sender
-//{
-//	if (!self.textView) {
-//		NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
-//		if ([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]) {
-//			self.textView = (NSTextView *)firstResponder;
-//		} else {
-//			NSBeep();
-//			return;
-//		}
-//	}
-//	if ([[NSUserDefaults standardUserDefaults] boolForKey:kOMColorHelperHighlightingDisabled]) {
-//		//Inserting a color implicitly activates color highlighting:
-//		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kOMColorHelperHighlightingDisabled];
-//		[self activateColorHighlighting];
-//	}
-//	[self.textView.undoManager beginUndoGrouping];
-//	NSInteger insertionMode = [[NSUserDefaults standardUserDefaults] integerForKey:kOMColorHelperInsertionMode];
-//	if (insertionMode == 0) {
-//		[self.textView insertText:@"[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0]" replacementRange:self.textView.selectedRange];
-//	} else {
-//		[self.textView insertText:@"[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0]" replacementRange:self.textView.selectedRange];
-//	}
-//	[self.textView.undoManager endUndoGrouping];
-//	[self performSelector:@selector(activateColorWell) withObject:nil afterDelay:0.0];
-//}
-
-//- (void)activateColorWell
-//{
-//	// [self.colorWell activate:YES];
-//}
 
 #pragma mark - Text Selection Handling
 
@@ -180,7 +120,7 @@
 	if ([[notification object] isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [[notification object] isKindOfClass:[NSTextView class]]) {
 		self.textView = (NSTextView *)[notification object];
 
-		BOOL disabled = [[NSUserDefaults standardUserDefaults] boolForKey:kOMColorHelperHighlightingDisabled];
+		BOOL disabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
 		if (disabled) return;
 		NSArray *selectedRanges = [self.textView selectedRanges];
 		if (selectedRanges.count >= 1) {
@@ -214,85 +154,25 @@
 				self.stringFrameView.color = strokeColor;
 				[self.textView addSubview:self.stringFrameView];
 			} else {
-				[self dismissColorWell];
+				[self dismissPopover];
 			}
 		} else {
-			[self dismissColorWell];
+			[self dismissPopover];
 		}
 	}
 }
 
-- (void)dismissColorWell
+- (void)dismissPopover
 {
-//	if (self.colorWell.isActive) {
-//		[self.colorWell deactivate];
-//		[[NSColorPanel sharedColorPanel] orderOut:nil];
-//	}
+    if(_stringPopover) {
+        [_stringPopover close];
+        [_stringPopover autorelease];
+    }
 	[self.stringButton removeFromSuperview];
 	[self.stringFrameView removeFromSuperview];
 	self.selectedStringRange = NSMakeRange(NSNotFound, 0);
 	self.selectedStringContent = nil;
 }
-
-//- (NSString *)escapeString:(NSString *) {
-//    NSMutableString *json = [NSMutableString string];
-//    [json appendString:@"\""];
-//
-//    if(!kEscapeChars) {
-//        kEscapeChars = [NSMutableCharacterSet characterSetWithRange:NSMakeRange(0,32)];
-//        [kEscapeChars addCharactersInString: @"\"\\"];
-//    }
-//
-//    NSRange esc = [self rangeOfCharacterFromSet:kEscapeChars];
-//    if ( !esc.length ) {
-//        // No special chars -- can just add the raw string:
-//        [json appendString:self];
-//
-//    }
-//    else {
-//        NSUInteger length = [self length];
-//        for (NSUInteger i = 0; i < length; i++) {
-//            unichar uc = [self characterAtIndex:i];
-//            switch (uc) {
-//                case '"':   [json appendString:@"\\\""];       break;
-//                case '\'':  [json appendString:@"\\\'"];       break;
-//                    // case '%':  [json appendString:@"\\%"];        break;
-//                case '\\':  [json appendString:@"\\\\"];       break;
-//                case '\t':  [json appendString:@"\\t"];        break;
-//                case '\n':  [json appendString:@"\\n"];        break;
-//                case '\r':  [json appendString:@"\\r"];        break;
-//                case '\b':  [json appendString:@"\\b"];        break;
-//                case '\f':  [json appendString:@"\\f"];        break;
-//                default: {
-//                    if (uc < 0x20) {
-//                        [json appendFormat:@"\\u%04x", uc];
-//                    }
-//                    else {
-//                        CFStringAppendCharacters((__bridge CFMutableStringRef)json, &uc, 1);
-//                    }
-//                }
-//                    break;
-//            }
-//        }
-//    }
-//
-//    [json appendString:@"\""];
-//    return (NSString *)json;
-//}
-
-//- (void)colorDidChange:(id)sender
-//{
-//	if (self.selectedStringRange.location == NSNotFound) {
-//		return;
-//	}
-//    // FIXME:dholtwick:2012-12-09 -
-//	NSString *colorString = self.selectedStringContent;
-//	if (colorString) {
-//		[self.textView.undoManager beginUndoGrouping];
-//		[self.textView insertText:colorString replacementRange:self.selectedStringRange];
-//		[self.textView.undoManager endUndoGrouping];
-//	}
-//}
 
 - (void)popoverWillClose:(NSNotification *)notification {
     if (self.selectedStringRange.location == NSNotFound) {
@@ -300,13 +180,13 @@
 	}
 
     NSTextField *textfield = (id)_stringPopoverViewController.view;
-    
+
 
     id data = [NSJSONSerialization dataWithJSONObject:@[textfield.stringValue]
                                               options:0
                                                 error:NULL];
-    NSString *back = [[NSString alloc] initWithData:data
-                                           encoding:NSUTF8StringEncoding];
+    NSString *back = [[[NSString alloc] initWithData:data
+                                            encoding:NSUTF8StringEncoding] autorelease];
     back = [back substringWithRange:NSMakeRange(2, back.length - 4)];
     if(back && ![back isEqualToString:_selectedStringContent]) {
         [self.textView.undoManager beginUndoGrouping];
@@ -317,6 +197,10 @@
 }
 
 - (void)showPopover:(id)sender {
+    if(_stringPopover) {
+        [_stringPopover close];
+        [_stringPopover autorelease];
+    }
     NSString *s = [NSString stringWithFormat:@"\"%@\"", _selectedStringContent];
     id value =
     [NSJSONSerialization JSONObjectWithData:[s dataUsingEncoding:NSUTF8StringEncoding]
@@ -328,14 +212,14 @@
     NSTextField *textfield = (id)_stringPopoverViewController.view;
     textfield.stringValue = value;
     textfield.font = self.textView.font;
-    NSSize size = NSMakeSize(self.textView.bounds.size.width * 0.75, 120);
-    NSPopover *popover = [[NSPopover alloc] init];
-    popover.contentViewController = _stringPopoverViewController;
-    popover.contentSize = size;
-    popover.delegate = self;
-    [popover showRelativeToRect:self.stringButton.bounds
-                         ofView:self.stringButton
-                  preferredEdge:NSMinYEdge];
+    NSSize size = NSMakeSize(self.textView.bounds.size.width * 0.50, 120);
+    _stringPopover = [[NSPopover alloc] init];
+    _stringPopover.contentViewController = _stringPopoverViewController;
+    _stringPopover.contentSize = size;
+    _stringPopover.delegate = self;
+    [_stringPopover showRelativeToRect:self.stringButton.bounds
+                                ofView:self.stringButton
+                         preferredEdge:NSMinYEdge];
 }
 
 #pragma mark - View Initialization
@@ -386,6 +270,7 @@
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self dismissPopover];
     [_stringPopoverViewController release];
     [_selectedStringContent release];
 	[_stringButton release];
