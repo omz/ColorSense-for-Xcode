@@ -4,6 +4,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface HOPlainColorWell : NSButton
+@interface HOPopoverViewController : NSViewController
 
 @end

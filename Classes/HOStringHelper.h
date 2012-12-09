@@ -30,10 +30,10 @@ BOOL OMColorTypeIsNSColor(OMColorType colorType) { return colorType >= OMColorTy
 
 //TODO: Maybe support HSB and CMYK color types...
 
-@class HOColorFrameView, HOPlainColorWell;
+@class HOColorFrameView, HOPlainColorWell, HOStringViewController;
 
 @interface HOStringHelper : NSObject {
-	
+    HOStringViewController *_stringViewController;
 	HOPlainColorWell *_colorWell;
 	HOColorFrameView *_colorFrameView;
 	NSRange _selectedColorRange;

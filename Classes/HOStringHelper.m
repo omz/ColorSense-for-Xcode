@@ -9,6 +9,7 @@
 #import "HOStringHelper.h"
 #import "HOPlainColorWell.h"
 #import "HOColorFrameView.h"
+#import "HOPopoverViewController.h"
 
 #define kOMColorHelperHighlightingDisabled	@"OMColorHelperHighlightingDisabled"
 #define kOMColorHelperInsertionMode			@"OMColorHelperInsertionMode"
@@ -45,28 +46,28 @@
 	NSMenuItem *editMenuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
 	if (editMenuItem) {
 		[[editMenuItem submenu] addItem:[NSMenuItem separatorItem]];
-		
+
 		NSMenuItem *toggleColorHighlightingMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Show Colors Under Caret" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""] autorelease];
 		[toggleColorHighlightingMenuItem setTarget:self];
 		[[editMenuItem submenu] addItem:toggleColorHighlightingMenuItem];
-		
+
 		NSMenuItem *colorInsertionModeItem = [[[NSMenuItem alloc] initWithTitle:@"Color Insertion Mode" action:nil keyEquivalent:@""] autorelease];
 		NSMenuItem *colorInsertionModeNSItem = [[[NSMenuItem alloc] initWithTitle:@"NSColor" action:@selector(selectNSColorInsertionMode:) keyEquivalent:@""] autorelease];
 		[colorInsertionModeNSItem setTarget:self];
 		NSMenuItem *colorInsertionModeUIItem = [[[NSMenuItem alloc] initWithTitle:@"UIColor" action:@selector(selectUIColorInsertionMode:) keyEquivalent:@""] autorelease];
 		[colorInsertionModeUIItem setTarget:self];
-		
+
 		NSMenu *colorInsertionModeMenu = [[[NSMenu alloc] initWithTitle:@"Color Insertion Mode"] autorelease];
 		[colorInsertionModeItem setSubmenu:colorInsertionModeMenu];
 		[[colorInsertionModeItem submenu] addItem:colorInsertionModeUIItem];
 		[[colorInsertionModeItem submenu] addItem:colorInsertionModeNSItem];
 		[[editMenuItem submenu] addItem:colorInsertionModeItem];
-		
+
 		NSMenuItem *insertColorMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Insert Color..." action:@selector(insertColor:) keyEquivalent:@""] autorelease];
 		[insertColorMenuItem setTarget:self];
 		[[editMenuItem submenu] addItem:insertColorMenuItem];
 	}
-	
+
 	BOOL highlightingEnabled = ![[NSUserDefaults standardUserDefaults] boolForKey:kOMColorHelperHighlightingDisabled];
 	if (highlightingEnabled) {
 		[self activateColorHighlighting];
@@ -125,7 +126,7 @@
 	if (self.textView) {
 		NSNotification *notification = [NSNotification notificationWithName:NSTextViewDidChangeSelectionNotification object:self.textView];
 		[self selectionDidChange:notification];
-		
+
 	}
 }
 
@@ -167,7 +168,7 @@
 
 - (void)activateColorWell
 {
-	[self.colorWell activate:YES];
+	// [self.colorWell activate:YES];
 }
 
 #pragma mark - Text Selection Handling
@@ -176,10 +177,10 @@
 {
 	if ([[notification object] isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [[notification object] isKindOfClass:[NSTextView class]]) {
 		self.textView = (NSTextView *)[notification object];
-		
+
 		BOOL disabled = [[NSUserDefaults standardUserDefaults] boolForKey:kOMColorHelperHighlightingDisabled];
 		if (disabled) return;
-		
+
 		NSArray *selectedRanges = [self.textView selectedRanges];
 		if (selectedRanges.count >= 1) {
 			NSRange selectedRange = [[selectedRanges objectAtIndex:0] rangeValue];
@@ -187,23 +188,25 @@
 			NSRange lineRange = [text lineRangeForRange:selectedRange];
 			NSRange selectedRangeInLine = NSMakeRange(selectedRange.location - lineRange.location, selectedRange.length);
 			NSString *line = [text substringWithRange:lineRange];
-			
+
 			NSRange colorRange = NSMakeRange(NSNotFound, 0);
 			OMColorType colorType = OMColorTypeNone;
 			NSColor *matchedColor = [self colorInText:line selectedRange:selectedRangeInLine type:&colorType matchedRange:&colorRange];
-			
+
 			if (matchedColor) {
 				NSColor *backgroundColor = [self.textView.backgroundColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
 				CGFloat r = 1.0; CGFloat g = 1.0; CGFloat b = 1.0;
 				[backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
 				CGFloat backgroundLuminance = (r + g + b) / 3.0;
-								
+
 				NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:0.2 alpha:1.0] : [NSColor whiteColor];
-				
+
 				self.selectedColorType = colorType;
-				self.colorWell.color = matchedColor;
-				self.colorWell.strokeColor = strokeColor;
-				
+
+
+				// self.colorWell.color = matchedColor;
+				// self.colorWell.strokeColor = strokeColor;
+
 				self.selectedColorRange = NSMakeRange(colorRange.location + lineRange.location, colorRange.length);
 				NSRect selectionRectOnScreen = [self.textView firstRectForCharacterRange:self.selectedColorRange];
 				NSRect selectionRectInWindow = [self.textView.window convertRectFromScreen:selectionRectOnScreen];
@@ -212,9 +215,9 @@
 				self.colorWell.frame = NSIntegralRect(colorWellRect);
 				[self.textView addSubview:self.colorWell];
 				self.colorFrameView.frame = NSInsetRect(NSIntegralRect(selectionRectInView), -1, -1);
-				
+
 				self.colorFrameView.color = strokeColor;
-				
+
 				[self.textView addSubview:self.colorFrameView];
 			} else {
 				[self dismissColorWell];
@@ -227,10 +230,10 @@
 
 - (void)dismissColorWell
 {
-	if (self.colorWell.isActive) {
-		[self.colorWell deactivate];
-		[[NSColorPanel sharedColorPanel] orderOut:nil];
-	}
+//	if (self.colorWell.isActive) {
+//		[self.colorWell deactivate];
+//		[[NSColorPanel sharedColorPanel] orderOut:nil];
+//	}
 	[self.colorWell removeFromSuperview];
 	[self.colorFrameView removeFromSuperview];
 	self.selectedColorRange = NSMakeRange(NSNotFound, 0);
@@ -242,12 +245,18 @@
 	if (self.selectedColorRange.location == NSNotFound) {
 		return;
 	}
-	NSString *colorString = [self colorStringForColor:self.colorWell.color withType:self.selectedColorType];
+	NSString *colorString = [self colorStringForColor:nil withType:self.selectedColorType];
 	if (colorString) {
 		[self.textView.undoManager beginUndoGrouping];
 		[self.textView insertText:colorString replacementRange:self.selectedColorRange];
 		[self.textView.undoManager endUndoGrouping];
 	}
+}
+
+- (void)showPopover:(id)sender {
+    NSPopover *popover = [[NSPopover alloc] init];
+    popover.contentViewController = [[HOPopoverViewController alloc] init];
+    [popover showRelativeToRect:self.colorWell.bounds ofView:self.colorWell preferredEdge:NSMaxXEdge];
 }
 
 #pragma mark - View Initialization
@@ -257,7 +266,7 @@
 	if (!_colorWell) {
 		_colorWell = [[HOPlainColorWell alloc] initWithFrame:NSMakeRect(0, 0, 50, 30)];
 		[_colorWell setTarget:self];
-		[_colorWell setAction:@selector(colorDidChange:)];
+		[_colorWell setAction:@selector(showPopover:)];
 	}
 	return _colorWell;
 }
@@ -277,7 +286,7 @@
 	__block NSColor *foundColor = nil;
 	__block NSRange foundColorRange = NSMakeRange(NSNotFound, 0);
 	__block OMColorType foundColorType = OMColorTypeNone;
-	
+
 	[_stringRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 		NSRange colorRange = [result range];
 		if (selectedRange.location >= colorRange.location && NSMaxRange(selectedRange) <= NSMaxRange(colorRange)) {
@@ -286,7 +295,7 @@
 				foundColorType = OMColorTypeUIRGBAInit;
 			} else {
 				foundColorType = OMColorTypeUIRGBA;
-			}        
+			}
 			foundColor = [NSColor redColor];
 			foundColorRange = colorRange;
 			*stop = YES;
@@ -301,7 +310,7 @@
 		}
 		return foundColor;
 	}
-	
+
 	return nil;
 }
 
