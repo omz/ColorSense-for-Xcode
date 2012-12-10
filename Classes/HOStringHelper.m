@@ -73,8 +73,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 
 #pragma mark - Plugin Initialization
 
-+ (void)pluginDidLoad:(NSBundle *)plugin
-{
++ (void)pluginDidLoad:(NSBundle *)plugin {
 	static id sharedPlugin = nil;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -82,8 +81,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 	});
 }
 
-- (id)init
-{
+- (id)init {
 	if (self = [super init]) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
 		_selectedStringRange = NSMakeRange(NSNotFound, 0);
@@ -94,8 +92,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 	return self;
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)notification
-{
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {
 	NSMenuItem *editMenuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
 	if (editMenuItem) {
 		[[editMenuItem submenu] addItem:[NSMenuItem separatorItem]];
@@ -118,8 +115,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 
 #pragma mark - Preferences
 
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
-{
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	if ([menuItem action] == @selector(insertColor:)) {
 		NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
 		return ([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]);
@@ -131,8 +127,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 	return YES;
 }
 
-- (void)toggleColorHighlightingEnabled:(id)sender
-{
+- (void)toggleColorHighlightingEnabled:(id)sender {
 	BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
 	[[NSUserDefaults standardUserDefaults] setBool:!enabled forKey:kHOStringHelperHighlightingDisabled];
 	if (enabled) {
@@ -142,8 +137,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 	}
 }
 
-- (void)activateColorHighlighting
-{
+- (void)activateColorHighlighting {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectionDidChange:) name:NSTextViewDidChangeSelectionNotification object:nil];
 	if (!self.textView) {
 		NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
@@ -158,8 +152,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 	}
 }
 
-- (void)deactivateColorHighlighting
-{
+- (void)deactivateColorHighlighting {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSTextViewDidChangeSelectionNotification object:nil];
 	[self dismissPopover];
 	self.textView = nil;
@@ -167,8 +160,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 
 #pragma mark - Text Selection Handling
 
-- (void)selectionDidChange:(NSNotification *)notification
-{
+- (void)selectionDidChange:(NSNotification *)notification {
 	if ([[notification object] isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [[notification object] isKindOfClass:[NSTextView class]]) {
 		self.textView = (NSTextView *)[notification object];
 
@@ -211,28 +203,27 @@ static NSMutableCharacterSet *staticEscapeChars;
                 [aAttributes setValue:[NSFont boldSystemFontOfSize:11] forKey:NSFontAttributeName];
                 [aAttributes setValue:aStyle forKey:NSParagraphStyleAttributeName];
                 
-                
                 NSAttributedString * aAttributedString = [[[NSAttributedString alloc] initWithString:aString attributes:aAttributes] autorelease];
                 self.stringButton.attributedTitle = aAttributedString;
 
-                
                 self.stringButton.strokeColor = strokeColor;
 				[self.textView addSubview:self.stringButton];
 
 				self.stringFrameView.frame = NSInsetRect(NSIntegralRect(selectionRectInView), -1, -1);
 				self.stringFrameView.color = strokeColor;
 				[self.textView addSubview:self.stringFrameView];
-			} else {
+			}
+            else {
 				[self dismissPopover];
 			}
-		} else {
+		}
+        else {
 			[self dismissPopover];
 		}
 	}
 }
 
-- (void)dismissPopover
-{
+- (void)dismissPopover {
     if(_stringPopover) {
         [_stringPopover close];
         [_stringPopover autorelease];
@@ -288,8 +279,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 
 #pragma mark - View Initialization
 
-- (HOStringInfoButton *)stringButton
-{
+- (HOStringInfoButton *)stringButton {
 	if (!_stringButton) {
 		_stringButton = [[HOStringInfoButton alloc] initWithFrame:NSMakeRect(0, 0, 100, 30)];
 		[_stringButton setTarget:self];
@@ -298,8 +288,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 	return _stringButton;
 }
 
-- (HOStringFrameView *)stringFrameView
-{
+- (HOStringFrameView *)stringFrameView {
 	if (!_stringFrameView) {
 		_stringFrameView = [[HOStringFrameView alloc] initWithFrame:NSZeroRect];
 	}
@@ -308,8 +297,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 
 #pragma mark - Color String Parsing
 
-- (NSString *)stringInText:(NSString *)text selectedRange:(NSRange)selectedRange matchedRange:(NSRangePointer)matchedRange
-{
+- (NSString *)stringInText:(NSString *)text selectedRange:(NSRange)selectedRange matchedRange:(NSRangePointer)matchedRange {
 	__block NSString *foundStringContent = nil;
 	__block NSRange foundColorRange = NSMakeRange(NSNotFound, 0);
 	[_stringRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
@@ -331,8 +319,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 
 #pragma mark -
 
-- (void)dealloc
-{
+- (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
     [self dismissPopover];
     [_stringPopoverViewController release];

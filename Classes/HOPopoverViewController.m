@@ -43,10 +43,8 @@
         }
         return YES;
     }
-    
-    
-    if (commandSelector == @selector(insertNewline:))
-    {
+
+    if (commandSelector == @selector(insertNewline:)) {
         // new line action:
         // always insert a line-break character and don’t cause the receiver
         // to end editing
