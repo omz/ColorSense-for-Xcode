@@ -191,7 +191,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 				[backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
 				CGFloat backgroundLuminance = (r + g + b) / 3.0;
 
-				NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:0.2 alpha:1.0] : [NSColor colorWithCalibratedWhite:1.000 alpha:0.900];
+				NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:0.5 alpha:1.000] : [NSColor colorWithCalibratedWhite:1.000 alpha:0.900];
 
 				self.selectedStringRange = NSMakeRange(colorRange.location + lineRange.location, colorRange.length);
 				NSRect selectionRectOnScreen = [self.textView firstRectForCharacterRange:self.selectedStringRange];
@@ -201,7 +201,21 @@ static NSMutableCharacterSet *staticEscapeChars;
 				// NSRect buttonRect = NSMakeRect(NSMaxX(selectionRectInView) - 49, NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
                 NSRect buttonRect = NSMakeRect(NSMinX(selectionRectInView), NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
 				self.stringButton.frame = NSIntegralRect(buttonRect);
-                self.stringButton.title = [NSString stringWithFormat:@"%d", (int)[[self unescapeString:_selectedStringContent] length]];
+               
+                NSString * aString = [NSString stringWithFormat:@"%d", (int)[[self unescapeString:_selectedStringContent] length]];
+                
+                NSMutableDictionary * aAttributes = [NSMutableDictionary dictionary];
+                NSMutableParagraphStyle * aStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
+                aStyle.alignment = NSCenterTextAlignment;
+                [aAttributes setValue:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
+                [aAttributes setValue:[NSFont boldSystemFontOfSize:11] forKey:NSFontAttributeName];
+                [aAttributes setValue:aStyle forKey:NSParagraphStyleAttributeName];
+                
+                
+                NSAttributedString * aAttributedString = [[[NSAttributedString alloc] initWithString:aString attributes:aAttributes] autorelease];
+                self.stringButton.attributedTitle = aAttributedString;
+
+                
                 self.stringButton.strokeColor = strokeColor;
 				[self.textView addSubview:self.stringButton];
 

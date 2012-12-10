@@ -26,7 +26,7 @@
 	[path addClip];
 
     {
-        [[NSColor colorWithCalibratedWhite:0.800 alpha:1.000] setFill];
+        [[NSColor colorWithCalibratedWhite:0.500 alpha:1.000] setFill];
         NSRectFill(self.bounds);
         [super drawRect:dirtyRect];
     }
