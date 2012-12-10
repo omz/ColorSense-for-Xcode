@@ -19,6 +19,58 @@
 @synthesize selectedStringRange = _selectedStringRange;
 @synthesize selectedStringContent=_selectedStringContent;
 
+#pragma mark - String Helper
+
+static NSMutableCharacterSet *staticEscapeChars;
+
+- (NSString *)escapeString:(NSString *)string {
+    NSMutableString *result = [NSMutableString string];
+    if(!staticEscapeChars) {
+        staticEscapeChars = [NSMutableCharacterSet characterSetWithRange:NSMakeRange(0,32)];
+        [staticEscapeChars addCharactersInString: @"\"\\"];
+    }
+    NSRange esc = [string rangeOfCharacterFromSet:staticEscapeChars];
+    if (!esc.length) {
+        [result appendString:string];
+    }
+    else {
+        NSUInteger length = [string length];
+        for (NSUInteger i = 0; i < length; i++) {
+            unichar uc = [string characterAtIndex:i];
+            switch (uc) {
+                case '"':   [result appendString:@"\\\""]; break;
+                case '\'':  [result appendString:@"\\\'"]; break;
+                case '\\':  [result appendString:@"\\\\"]; break;
+                case '\t':  [result appendString:@"\\t"]; break;
+                case '\n':  [result appendString:@"\\n"]; break;
+                case '\r':  [result appendString:@"\\r"]; break;
+                case '\b':  [result appendString:@"\\b"]; break;
+                case '\f':  [result appendString:@"\\f"]; break;
+                default: {
+                    if (uc < 0x20) {
+                        [result appendFormat:@"\\u%04x", uc];
+                    }
+                    else {
+                        CFStringAppendCharacters((CFMutableStringRef)result, &uc, 1);
+                    }
+                } break;
+            }
+        }
+    }
+    return (NSString *)result;
+}
+
+- (NSString *)unescapeString:(NSString *)string {
+    @try {
+        NSString *s = [NSString stringWithFormat:@"\"%@\"", string];
+        return [NSJSONSerialization JSONObjectWithData:[s dataUsingEncoding:NSUTF8StringEncoding]
+                                               options:NSJSONReadingAllowFragments
+                                                 error:NULL];
+    }
+    @catch (NSException *exception) { ; }
+    return nil;
+}
+
 #pragma mark - Plugin Initialization
 
 + (void)pluginDidLoad:(NSBundle *)plugin
@@ -145,9 +197,11 @@
 				NSRect selectionRectOnScreen = [self.textView firstRectForCharacterRange:self.selectedStringRange];
 				NSRect selectionRectInWindow = [self.textView.window convertRectFromScreen:selectionRectOnScreen];
 				NSRect selectionRectInView = [self.textView convertRect:selectionRectInWindow fromView:nil];
-				NSRect colorWellRect = NSMakeRect(NSMaxX(selectionRectInView) - 49, NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
 
-				self.stringButton.frame = NSIntegralRect(colorWellRect);
+				NSRect buttonRect = NSMakeRect(NSMaxX(selectionRectInView) - 49, NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
+				self.stringButton.frame = NSIntegralRect(buttonRect);
+                self.stringButton.title = [NSString stringWithFormat:@"%d", (int)[[self unescapeString:_selectedStringContent] length]];
+                self.stringButton.strokeColor = strokeColor;
 				[self.textView addSubview:self.stringButton];
 
 				self.stringFrameView.frame = NSInsetRect(NSIntegralRect(selectionRectInView), -1, -1);
@@ -180,19 +234,15 @@
 	}
 
     NSTextField *textfield = (id)_stringPopoverViewController.view;
-
-
-    id data = [NSJSONSerialization dataWithJSONObject:@[textfield.stringValue]
-                                              options:0
-                                                error:NULL];
-    NSString *back = [[[NSString alloc] initWithData:data
-                                            encoding:NSUTF8StringEncoding] autorelease];
-    back = [back substringWithRange:NSMakeRange(2, back.length - 4)];
-    if(back && ![back isEqualToString:_selectedStringContent]) {
-        [self.textView.undoManager beginUndoGrouping];
-		[self.textView insertText:[NSString stringWithFormat:@"@\"%@\"", back]
-                 replacementRange:self.selectedStringRange];
-		[self.textView.undoManager endUndoGrouping];
+    NSString *result = textfield.stringValue;
+    if(result) {
+        result = [self escapeString:result];
+        if(![result isEqualToString:_selectedStringContent]) {
+            [self.textView.undoManager beginUndoGrouping];
+            [self.textView insertText:[NSString stringWithFormat:@"@\"%@\"", result]
+                     replacementRange:self.selectedStringRange];
+            [self.textView.undoManager endUndoGrouping];
+        }
     }
 }
 
@@ -200,17 +250,12 @@
     if(_stringPopover) {
         [_stringPopover close];
         [_stringPopover autorelease];
-    }
-    NSString *s = [NSString stringWithFormat:@"\"%@\"", _selectedStringContent];
-    id value =
-    [NSJSONSerialization JSONObjectWithData:[s dataUsingEncoding:NSUTF8StringEncoding]
-                                    options:NSJSONReadingAllowFragments
-                                      error:NULL];
+    }    
     if(!_stringPopoverViewController) {
         _stringPopoverViewController = [[[HOPopoverViewController alloc] init] autorelease];
     }
     NSTextField *textfield = (id)_stringPopoverViewController.view;
-    textfield.stringValue = value;
+    textfield.stringValue = [self unescapeString:_selectedStringContent];
     textfield.font = self.textView.font;
     NSSize size = NSMakeSize(self.textView.bounds.size.width * 0.50, 120);
     _stringPopover = [[NSPopover alloc] init];
