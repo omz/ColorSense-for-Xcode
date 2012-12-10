@@ -6,8 +6,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface HOPopoverViewController : NSViewController {
+@interface HOPopoverViewController : NSViewController <NSTextFieldDelegate> {
     NSTextField *_textField;
+    id _delegate;
 }
+
+@property (assign, nonatomic) id delegate;
 
 @end

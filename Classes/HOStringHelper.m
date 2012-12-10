@@ -191,14 +191,15 @@ static NSMutableCharacterSet *staticEscapeChars;
 				[backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
 				CGFloat backgroundLuminance = (r + g + b) / 3.0;
 
-				NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:0.2 alpha:1.0] : [NSColor whiteColor];
+				NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:0.2 alpha:1.0] : [NSColor colorWithCalibratedWhite:1.000 alpha:0.900];
 
 				self.selectedStringRange = NSMakeRange(colorRange.location + lineRange.location, colorRange.length);
 				NSRect selectionRectOnScreen = [self.textView firstRectForCharacterRange:self.selectedStringRange];
 				NSRect selectionRectInWindow = [self.textView.window convertRectFromScreen:selectionRectOnScreen];
 				NSRect selectionRectInView = [self.textView convertRect:selectionRectInWindow fromView:nil];
 
-				NSRect buttonRect = NSMakeRect(NSMaxX(selectionRectInView) - 49, NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
+				// NSRect buttonRect = NSMakeRect(NSMaxX(selectionRectInView) - 49, NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
+                NSRect buttonRect = NSMakeRect(NSMinX(selectionRectInView), NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
 				self.stringButton.frame = NSIntegralRect(buttonRect);
                 self.stringButton.title = [NSString stringWithFormat:@"%d", (int)[[self unescapeString:_selectedStringContent] length]];
                 self.stringButton.strokeColor = strokeColor;
@@ -228,11 +229,10 @@ static NSMutableCharacterSet *staticEscapeChars;
 	self.selectedStringContent = nil;
 }
 
-- (void)popoverWillClose:(NSNotification *)notification {
-    if (self.selectedStringRange.location == NSNotFound) {
+- (void)stringDidChange:(id)sender {
+	if (self.selectedStringRange.location == NSNotFound) {
 		return;
 	}
-
     NSTextField *textfield = (id)_stringPopoverViewController.view;
     NSString *result = textfield.stringValue;
     if(result) {
@@ -246,6 +246,10 @@ static NSMutableCharacterSet *staticEscapeChars;
     }
 }
 
+- (void)popoverWillClose:(NSNotification *)notification {
+    [self stringDidChange:nil];
+}
+
 - (void)showPopover:(id)sender {
     if(_stringPopover) {
         [_stringPopover close];
@@ -253,6 +257,7 @@ static NSMutableCharacterSet *staticEscapeChars;
     }    
     if(!_stringPopoverViewController) {
         _stringPopoverViewController = [[[HOPopoverViewController alloc] init] autorelease];
+        _stringPopoverViewController.delegate = self;
     }
     NSTextField *textfield = (id)_stringPopoverViewController.view;
     textfield.stringValue = [self unescapeString:_selectedStringContent];
