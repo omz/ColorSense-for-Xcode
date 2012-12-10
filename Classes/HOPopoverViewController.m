@@ -37,12 +37,23 @@
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
     // NSLog(@"Textview Command: %@", NSStringFromSelector(commandSelector));
-    if(commandSelector == @selector(cancelOperation:) || commandSelector == @selector(insertNewline:)) {
+    if(commandSelector == @selector(cancelOperation:)) {
         if([_delegate respondsToSelector:@selector(dismissPopover)]) {
             [_delegate performSelector:@selector(dismissPopover)];
         }
         return YES;
     }
+    
+    
+    if (commandSelector == @selector(insertNewline:))
+    {
+        // new line action:
+        // always insert a line-break character and don’t cause the receiver
+        // to end editing
+        [textView insertNewlineIgnoringFieldEditor:self];
+        return YES;
+    }
+
     return NO;
 }
 
