@@ -31,4 +31,7 @@
 - (void)deactivateColorHighlighting;
 - (NSString *)stringInText:(NSString *)text selectedRange:(NSRange)selectedRange matchedRange:(NSRangePointer)matchedRange;
 
+- (NSString *)escapeString:(NSString *)string;
+- (NSString *)unescapeString:(NSString *)string;
+
 @end

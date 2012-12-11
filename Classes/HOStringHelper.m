@@ -38,14 +38,14 @@ static NSMutableCharacterSet *staticEscapeChars;
         for (NSUInteger i = 0; i < length; i++) {
             unichar uc = [string characterAtIndex:i];
             switch (uc) {
-                case '"':   [result appendString:@"\\\""]; break;
-                case '\'':  [result appendString:@"\\\'"]; break;
-                case '\\':  [result appendString:@"\\\\"]; break;
-                case '\t':  [result appendString:@"\\t"]; break;
-                case '\n':  [result appendString:@"\\n"]; break;
-                case '\r':  [result appendString:@"\\r"]; break;
-                case '\b':  [result appendString:@"\\b"]; break;
-                case '\f':  [result appendString:@"\\f"]; break;
+                case '\"': [result appendString:@"\\\""]; break;
+                case '\'': [result appendString:@"\\\'"]; break;
+                case '\\': [result appendString:@"\\\\"]; break;
+                case '\t': [result appendString:@"\\t"]; break;
+                case '\n': [result appendString:@"\\n"]; break;
+                case '\r': [result appendString:@"\\r"]; break;
+                case '\b': [result appendString:@"\\b"]; break;
+                case '\f': [result appendString:@"\\f"]; break;
                 default: {
                     if (uc < 0x20) {
                         [result appendFormat:@"\\u%04x", uc];
@@ -59,17 +59,61 @@ static NSMutableCharacterSet *staticEscapeChars;
     }
     return (NSString *)result;
 }
-
+ 
+#define nextUC ++i; if(i>=length) { break; }; uc = [string characterAtIndex:i];
 - (NSString *)unescapeString:(NSString *)string {
-    @try {
-        NSString *s = [NSString stringWithFormat:@"\"%@\"", string];
-        return [NSJSONSerialization JSONObjectWithData:[s dataUsingEncoding:NSUTF8StringEncoding]
-                                               options:NSJSONReadingAllowFragments
-                                                 error:NULL];
+    // NSScanner *scanner = [[NSScanner alloc] initWithString:string];
+    NSMutableString *result = [NSMutableString string];
+    NSUInteger length = [string length];
+    for (NSUInteger i = 0; i < length; i++) {
+        unichar uc = [string characterAtIndex:i];
+        if(uc == '\\') {
+            nextUC;
+            switch (uc) {
+                case '\"': [result appendString:@"\""]; break;
+                case '\'': [result appendString:@"\'"]; break;
+                case '\\': [result appendString:@"\\"]; break;
+                case 't':  [result appendString:@"\t"]; break;
+                case 'n':  [result appendString:@"\n"]; break;
+                case 'r':  [result appendString:@"\r"]; break;
+                case 'b':  [result appendString:@"\b"]; break;
+                case 'f':  [result appendString:@"\f"]; break;
+                case 'u': {
+                    unichar hex[5]; hex[4] = 0;
+                    nextUC; hex[0] = uc;
+                    nextUC; hex[1] = uc;
+                    nextUC; hex[2] = uc;
+                    nextUC; hex[3] = uc;
+                    
+                } break;
+                default: {
+                    CFStringAppendCharacters((CFMutableStringRef)result, &uc, 1);
+                } break;
+            }
+        }
+        else {
+            CFStringAppendCharacters((CFMutableStringRef)result, &uc, 1);
+        }
     }
-    @catch (NSException *exception) { ; }
-    return nil;
+    return result;
 }
+
+//- (NSString *)unescapeString:(NSString *)string {
+//    @try {
+//        NSError *error = nil;
+//        NSString *s = [NSString stringWithFormat:@"\"%@\"", string];
+//        NSString *result = [NSJSONSerialization JSONObjectWithData:[s dataUsingEncoding:NSUTF8StringEncoding]
+//                                                           options:NSJSONReadingAllowFragments
+//                                                             error:&error];
+//        if(!result) {
+//            NSLog(@"Error while unescaping: %@", error);
+//            return nil;
+//        }
+//        return result;
+//    }
+//    @catch (NSException *exception) { ; }
+//    return nil;
+//}
 
 #pragma mark - Plugin Initialization
 
