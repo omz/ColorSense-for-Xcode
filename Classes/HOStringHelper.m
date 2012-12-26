@@ -129,7 +129,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 	if (self = [super init]) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
 		_selectedStringRange = NSMakeRange(NSNotFound, 0);
-        _stringRegex = [[NSRegularExpression regularExpressionWithPattern:@"@\"((\\\\\"|.)*?)\""
+        _stringRegex = [[NSRegularExpression regularExpressionWithPattern:@"\"((\\\\\"|.)*?)\""
                                                                   options:0
                                                                     error:NULL] retain];
 	}
@@ -220,8 +220,8 @@ static NSMutableCharacterSet *staticEscapeChars;
 
 			NSRange colorRange = NSMakeRange(NSNotFound, 0);
             self.selectedStringContent = [self stringInText:line selectedRange:selectedRangeInLine matchedRange:&colorRange];
-			if (_selectedStringContent) {
-                self.selectedStringContent = [_selectedStringContent substringWithRange:NSMakeRange(2, _selectedStringContent.length - 3)];
+			if (_selectedStringContent && [_selectedStringContent length] >= 2) {
+                self.selectedStringContent = [_selectedStringContent substringWithRange:NSMakeRange(1, _selectedStringContent.length - 2)];
 				NSColor *backgroundColor = [self.textView.backgroundColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
 				CGFloat r = 1.0; CGFloat g = 1.0; CGFloat b = 1.0;
 				[backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
@@ -288,7 +288,7 @@ static NSMutableCharacterSet *staticEscapeChars;
         result = [self escapeString:result];
         if(![result isEqualToString:_selectedStringContent]) {
             [self.textView.undoManager beginUndoGrouping];
-            [self.textView insertText:[NSString stringWithFormat:@"@\"%@\"", result]
+            [self.textView insertText:[NSString stringWithFormat:@"\"%@\"", result]
                      replacementRange:self.selectedStringRange];
             [self.textView.undoManager endUndoGrouping];
         }
