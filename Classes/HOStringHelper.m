@@ -11,6 +11,8 @@
 
 #define kHOStringHelperHighlightingDisabled	@"HOStringHelperHighlightingDisabled"
 
+#define NSNullRange NSMakeRange(NSNotFound, 0)
+
 @implementation HOStringHelper
 
 @synthesize stringButton = _stringButton;
@@ -141,11 +143,18 @@ static NSMutableCharacterSet *staticEscapeChars;
 	if (editMenuItem) {
 		[[editMenuItem submenu] addItem:[NSMenuItem separatorItem]];
 
-		NSMenuItem *toggleColorHighlightingMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Show Strings Under Caret" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""] autorelease];
-		[toggleColorHighlightingMenuItem setTarget:self];
-		[[editMenuItem submenu] addItem:toggleColorHighlightingMenuItem];
+        {
+            NSMenuItem *item = [[[NSMenuItem alloc] initWithTitle:@"Show Strings Under Caret" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""] autorelease];
+            [item setTarget:self];
+            [[editMenuItem submenu] addItem:item];
+        }
 
-
+        {
+            NSMenuItem *item = [[[NSMenuItem alloc] initWithTitle:@"Show Strings Popover" action:@selector(showPopover:) keyEquivalent:@""] autorelease];
+            [item setTarget:self];
+            [[editMenuItem submenu] addItem:item];
+        }
+        
         //		NSMenuItem *insertColorMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Insert Color..." action:@selector(insertColor:) keyEquivalent:@""] autorelease];
         //		[insertColorMenuItem setTarget:self];
         //		[[editMenuItem submenu] addItem:insertColorMenuItem];
@@ -160,10 +169,10 @@ static NSMutableCharacterSet *staticEscapeChars;
 #pragma mark - Preferences
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
-	if ([menuItem action] == @selector(insertColor:)) {
-		NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
-		return ([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]);
-	} else if ([menuItem action] == @selector(toggleColorHighlightingEnabled:)) {
+	if ([menuItem action] == @selector(showPopover:)) {
+        return ![_stringPopover isShown];
+	}
+    else if ([menuItem action] == @selector(toggleColorHighlightingEnabled:)) {
 		BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
 		[menuItem setState:enabled ? NSOffState : NSOnState];
 		return YES;
@@ -207,9 +216,10 @@ static NSMutableCharacterSet *staticEscapeChars;
 - (void)selectionDidChange:(NSNotification *)notification {
 	if ([[notification object] isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [[notification object] isKindOfClass:[NSTextView class]]) {
 		self.textView = (NSTextView *)[notification object];
-
 		BOOL disabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
-		if (disabled) return;
+		if (disabled) {
+            return;
+        }
 		NSArray *selectedRanges = [self.textView selectedRanges];
 		if (selectedRanges.count >= 1) {
 			NSRange selectedRange = [[selectedRanges objectAtIndex:0] rangeValue];
@@ -217,53 +227,55 @@ static NSMutableCharacterSet *staticEscapeChars;
 			NSRange lineRange = [text lineRangeForRange:selectedRange];
 			NSRange selectedRangeInLine = NSMakeRange(selectedRange.location - lineRange.location, selectedRange.length);
 			NSString *line = [text substringWithRange:lineRange];
+			NSRange stringRange = NSNullRange;
 
-			NSRange colorRange = NSMakeRange(NSNotFound, 0);
-            self.selectedStringContent = [self stringInText:line selectedRange:selectedRangeInLine matchedRange:&colorRange];
+            self.selectedStringContent = [self stringInText:line selectedRange:selectedRangeInLine matchedRange:&stringRange];
 			if (_selectedStringContent && [_selectedStringContent length] >= 2) {
+
+                // String's content
+                NSInteger oldLocation = _selectedStringRange.location;
                 self.selectedStringContent = [_selectedStringContent substringWithRange:NSMakeRange(1, _selectedStringContent.length - 2)];
+				self.selectedStringRange = NSMakeRange(stringRange.location + lineRange.location, stringRange.length);
+                if(oldLocation != _selectedStringRange.location) {
+                    [self dismissPopover];
+                }
+                
+                // Color calculations based ion Xcode theme
 				NSColor *backgroundColor = [self.textView.backgroundColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
 				CGFloat r = 1.0; CGFloat g = 1.0; CGFloat b = 1.0;
 				[backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
 				CGFloat backgroundLuminance = (r + g + b) / 3.0;
-
 				NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:0.5 alpha:1.000] : [NSColor colorWithCalibratedWhite:1.000 alpha:0.900];
 
-				self.selectedStringRange = NSMakeRange(colorRange.location + lineRange.location, colorRange.length);
+                // Place button
 				NSRect selectionRectOnScreen = [self.textView firstRectForCharacterRange:self.selectedStringRange];
 				NSRect selectionRectInWindow = [self.textView.window convertRectFromScreen:selectionRectOnScreen];
 				NSRect selectionRectInView = [self.textView convertRect:selectionRectInWindow fromView:nil];
-
-				// NSRect buttonRect = NSMakeRect(NSMaxX(selectionRectInView) - 49, NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
                 NSRect buttonRect = NSMakeRect(NSMinX(selectionRectInView), NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
 				self.stringButton.frame = NSIntegralRect(buttonRect);
-               
+
+                // Button's label
                 NSString * aString = [NSString stringWithFormat:@"%d", (int)[[self unescapeString:_selectedStringContent] length]];
-                
                 NSMutableDictionary * aAttributes = [NSMutableDictionary dictionary];
                 NSMutableParagraphStyle * aStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
                 aStyle.alignment = NSCenterTextAlignment;
                 [aAttributes setValue:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
                 [aAttributes setValue:[NSFont boldSystemFontOfSize:11] forKey:NSFontAttributeName];
                 [aAttributes setValue:aStyle forKey:NSParagraphStyleAttributeName];
-                
                 NSAttributedString * aAttributedString = [[[NSAttributedString alloc] initWithString:aString attributes:aAttributes] autorelease];
                 self.stringButton.attributedTitle = aAttributedString;
-
                 self.stringButton.strokeColor = strokeColor;
 				[self.textView addSubview:self.stringButton];
 
+                // Draw the frame around the string
 				self.stringFrameView.frame = NSInsetRect(NSIntegralRect(selectionRectInView), -1, -1);
 				self.stringFrameView.color = strokeColor;
 				[self.textView addSubview:self.stringFrameView];
-			}
-            else {
-				[self dismissPopover];
+                
+                return;
 			}
 		}
-        else {
-			[self dismissPopover];
-		}
+        [self removeSelection];
 	}
 }
 
@@ -271,10 +283,15 @@ static NSMutableCharacterSet *staticEscapeChars;
     if(_stringPopover) {
         [_stringPopover close];
         [_stringPopover autorelease];
-    }
+        _stringPopover = nil;
+    }	 
+}
+
+- (void)removeSelection {
+    [self dismissPopover];    
 	[self.stringButton removeFromSuperview];
 	[self.stringFrameView removeFromSuperview];
-	self.selectedStringRange = NSMakeRange(NSNotFound, 0);
+	self.selectedStringRange = NSNullRange;
 	self.selectedStringContent = nil;
 }
 
@@ -296,14 +313,14 @@ static NSMutableCharacterSet *staticEscapeChars;
 }
 
 - (void)popoverWillClose:(NSNotification *)notification {
-    [self stringDidChange:nil];
+    // [self stringDidChange:nil];
 }
 
 - (void)showPopover:(id)sender {
-    if(_stringPopover) {
-        [_stringPopover close];
-        [_stringPopover autorelease];
-    }    
+    if(_selectedStringRange.location == NSNotFound) {
+        return;
+    }
+    [self dismissPopover];
     if(!_stringPopoverViewController) {
         _stringPopoverViewController = [[[HOPopoverViewController alloc] init] autorelease];
         _stringPopoverViewController.delegate = self;
