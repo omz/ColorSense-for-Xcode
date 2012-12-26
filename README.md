@@ -12,6 +12,12 @@ Simply build the Xcode project and restart Xcode. The plugin will automatically 
 
 If you get a "Permission Denied" error while building, please see [this issue](https://github.com/omz/ColorSense-for-Xcode/issues/1).
 
+## Keyboard Shortcut
+
+With a little trick you can enable keyboard shortcut for showing the popover. Open `System Preferences` app, then section `Keyboard` and add a custom application shortcut for Xcode as in the following image:
+
+![Screenshot](https://github.com/holtwick/HOStringSense-for-Xcode/raw/master/Shortcut.png "Keyboard Shortcur")
+
 ## Author
 
 I'm a Mac and iOS developer, follow me on Twitter [@holtwick](https://twitter.com/holtwick) or ADN [@ho](https://alpha.app.net/ho).
