@@ -1,8 +1,10 @@
-# HOStringSense for Xcode
+# HOStringSense for Xcode [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=holtwick&url=https://github.com/holtwick/HOStringSense-for-Xcode&title=HOStringSense-for-Xcode&language=&tags=github&category=software) 
 
-## Overview
+Perfect for editing regular expressions, multi line texts, inline HTML and many more use cases.
 
-Edit strings like `@"Hello\nWorld!"` unescaped.
+## Example
+
+Edit strings like `@"Hello\nWorld!"` unescaped!
 
 ![Screenshot](https://github.com/holtwick/HOStringSense-for-Xcode/raw/master/Xcode.png "Example")
 
