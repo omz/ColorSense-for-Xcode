@@ -10,6 +10,7 @@
 		7F2EB89C145057F200E97A87 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2EB899145057EA00E97A87 /* AppKit.framework */; };
 		7F6EE2BF15FA6F3B00BA114A /* OMColorFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6EE2BE15FA6F3B00BA114A /* OMColorFrameView.m */; };
 		7FDADE3A15FA6CA400A847E3 /* OMPlainColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FDADE3915FA6CA400A847E3 /* OMPlainColorWell.m */; };
+		D4487DC01695246C004C2258 /* NSColor+SSToolkitAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D4487DBF1695246C004C2258 /* NSColor+SSToolkitAdditions.m */; };
 		DA1B5D020E64686800921439 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089C1672FE841209C02AAC07 /* Foundation.framework */; };
 		DA37E2DC0E6291C8001BDFEF /* OMColorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA37E2DB0E6291C8001BDFEF /* OMColorHelper.m */; };
 /* End PBXBuildFile section */
@@ -24,6 +25,8 @@
 		7FDADE3915FA6CA400A847E3 /* OMPlainColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMPlainColorWell.m; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* OMColorSense.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OMColorSense.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4487DBE1695246C004C2258 /* NSColor+SSToolkitAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+SSToolkitAdditions.h"; sourceTree = "<group>"; };
+		D4487DBF1695246C004C2258 /* NSColor+SSToolkitAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+SSToolkitAdditions.m"; sourceTree = "<group>"; };
 		DA37E2DB0E6291C8001BDFEF /* OMColorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMColorHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -79,6 +82,8 @@
 		7F411B0C15FABAC6002F77B6 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D4487DBE1695246C004C2258 /* NSColor+SSToolkitAdditions.h */,
+				D4487DBF1695246C004C2258 /* NSColor+SSToolkitAdditions.m */,
 				7F2B355F15FA59D000DB3249 /* OMColorHelper.h */,
 				DA37E2DB0E6291C8001BDFEF /* OMColorHelper.m */,
 				7F6EE2BD15FA6F3B00BA114A /* OMColorFrameView.h */,
@@ -144,6 +149,7 @@
 				DA37E2DC0E6291C8001BDFEF /* OMColorHelper.m in Sources */,
 				7FDADE3A15FA6CA400A847E3 /* OMPlainColorWell.m in Sources */,
 				7F6EE2BF15FA6F3B00BA114A /* OMColorFrameView.m in Sources */,
+				D4487DC01695246C004C2258 /* NSColor+SSToolkitAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
