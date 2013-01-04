@@ -31,6 +31,8 @@ This is tested on OS X 10.8 with Xcode 4.4.1 and 4.5.
 
 * Only RGB (`colorWithRed:green:blue:alpha:`), grayscale (`colorWithWhite:alpha:`), and named colors (`redColor`...) are supported at the moment (no HSB or CMYK).
 
+* If you're using SSToolkit (http://sstoolk.it/), hex colors (`colorWithHex:`) are also supported.
+
 ## License
 
     Copyright (c) 2012, Ole Zorn
