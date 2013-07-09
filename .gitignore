@@ -12,3 +12,4 @@ build
 *.xcworkspacedata
 *.xcuserstate
 *xcuserdata*
+*.xccheckout
