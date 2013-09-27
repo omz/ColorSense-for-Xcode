@@ -29,14 +29,14 @@
 }
 
 - (void)controlTextDidChange:(NSNotification *)obj {
-    // NSLog(@"Test: %@", [_textField stringValue]);
+    //    NSLog(@"Test: %@", [_textField stringValue]);
     if([_delegate respondsToSelector:@selector(stringDidChange:)]) {
         [_delegate performSelector:@selector(stringDidChange:) withObject:nil];
     }
 }
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
-    // NSLog(@"Textview Command: %@", NSStringFromSelector(commandSelector));
+    //    NSLog(@"Textview Command: %@", NSStringFromSelector(commandSelector));
     if(commandSelector == @selector(cancelOperation:)) {
         if([_delegate respondsToSelector:@selector(dismissPopover)]) {
             [_delegate performSelector:@selector(dismissPopover)];

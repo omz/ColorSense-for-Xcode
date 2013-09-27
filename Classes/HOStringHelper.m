@@ -23,19 +23,9 @@
 
 #pragma mark - String Helper
 
-static NSMutableCharacterSet *staticEscapeChars;
-
 - (NSString *)escapeString:(NSString *)string {
     NSMutableString *result = [NSMutableString string];
     @try {
-        //        if(!staticEscapeChars) {
-        //            staticEscapeChars = [NSMutableCharacterSet characterSetWithCharactersInString:@"\"\\"];
-        //        }
-        //        NSRange esc = [string rangeOfCharacterFromSet:staticEscapeChars];
-        //        if (!esc.length) {
-        //            [result appendString:string];
-        //        }
-        //        else {
         NSUInteger length = [string length];
         for (NSUInteger i = 0; i < length; i++) {
             unichar uc = [string characterAtIndex:i];
@@ -218,6 +208,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 #pragma mark - Text Selection Handling
 
 - (void)selectionDidChange:(NSNotification *)notification {
+    //    NSLog(@"%s", __PRETTY_FUNCTION__);
 	if ([[notification object] isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [[notification object] isKindOfClass:[NSTextView class]]) {
 		self.textView = (NSTextView *)[notification object];
 		BOOL disabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
@@ -284,14 +275,14 @@ static NSMutableCharacterSet *staticEscapeChars;
 }
 
 - (void)dismissPopover {
+    //    NSLog(@"%s", __PRETTY_FUNCTION__);
     if(_stringPopover) {
         [_stringPopover close];
-        [_stringPopover autorelease];
-        _stringPopover = nil;
     }
 }
 
 - (void)removeSelection {
+    //    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self dismissPopover];
 	[self.stringButton removeFromSuperview];
 	[self.stringFrameView removeFromSuperview];
@@ -300,6 +291,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 }
 
 - (void)stringDidChange:(id)sender {
+    //    NSLog(@"%s", __PRETTY_FUNCTION__);
 	if (self.selectedStringRange.location == NSNotFound) {
 		return;
 	}
@@ -316,11 +308,13 @@ static NSMutableCharacterSet *staticEscapeChars;
     }
 }
 
-- (void)popoverWillClose:(NSNotification *)notification {
-    // [self stringDidChange:nil];
-}
+//- (void)popoverWillClose:(NSNotification *)notification {
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
+//    // [self stringDidChange:nil];
+//}
 
 - (void)showPopover:(id)sender {
+    //    NSLog(@"%s", __PRETTY_FUNCTION__);
     if(_selectedStringRange.location == NSNotFound) {
         return;
     }
@@ -333,7 +327,9 @@ static NSMutableCharacterSet *staticEscapeChars;
     textfield.stringValue = [self unescapeString:_selectedStringContent];
     textfield.font = self.textView.font;
     NSSize size = NSMakeSize(self.textView.bounds.size.width * 0.50, 120);
-    _stringPopover = [[NSPopover alloc] init];
+    if(!_stringPopover) {
+        _stringPopover = [[NSPopover alloc] init];
+    }
     _stringPopover.contentViewController = _stringPopoverViewController;
     _stringPopover.contentSize = size;
     _stringPopover.delegate = self;
