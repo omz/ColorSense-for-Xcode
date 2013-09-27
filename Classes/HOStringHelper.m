@@ -27,15 +27,15 @@ static NSMutableCharacterSet *staticEscapeChars;
 
 - (NSString *)escapeString:(NSString *)string {
     NSMutableString *result = [NSMutableString string];
-    if(!staticEscapeChars) {
-        staticEscapeChars = [NSMutableCharacterSet characterSetWithRange:NSMakeRange(0,32)];
-        [staticEscapeChars addCharactersInString: @"\"\\"];
-    }
-    NSRange esc = [string rangeOfCharacterFromSet:staticEscapeChars];
-    if (!esc.length) {
-        [result appendString:string];
-    }
-    else {
+    @try {
+        //        if(!staticEscapeChars) {
+        //            staticEscapeChars = [NSMutableCharacterSet characterSetWithCharactersInString:@"\"\\"];
+        //        }
+        //        NSRange esc = [string rangeOfCharacterFromSet:staticEscapeChars];
+        //        if (!esc.length) {
+        //            [result appendString:string];
+        //        }
+        //        else {
         NSUInteger length = [string length];
         for (NSUInteger i = 0; i < length; i++) {
             unichar uc = [string characterAtIndex:i];
@@ -53,15 +53,19 @@ static NSMutableCharacterSet *staticEscapeChars;
                         [result appendFormat:@"\\u%04x", uc];
                     }
                     else {
-                        CFStringAppendCharacters((CFMutableStringRef)result, &uc, 1);
+                        [result appendFormat:@"%C", uc];
                     }
                 } break;
             }
         }
+        //        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Error while converting string: %@", exception);
     }
     return (NSString *)result;
 }
- 
+
 #define nextUC ++i; if(i>=length) { break; }; uc = [string characterAtIndex:i];
 - (NSString *)unescapeString:(NSString *)string {
     // NSScanner *scanner = [[NSScanner alloc] initWithString:string];
@@ -86,7 +90,7 @@ static NSMutableCharacterSet *staticEscapeChars;
                     nextUC; hex[1] = uc;
                     nextUC; hex[2] = uc;
                     nextUC; hex[3] = uc;
-                    
+
                 } break;
                 default: {
                     CFStringAppendCharacters((CFMutableStringRef)result, &uc, 1);
@@ -144,7 +148,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 		[[editMenuItem submenu] addItem:[NSMenuItem separatorItem]];
 
         {
-            NSMenuItem *item = [[[NSMenuItem alloc] initWithTitle:@"Show Strings Under Caret" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""] autorelease];
+            NSMenuItem *item = [[[NSMenuItem alloc] initWithTitle:@"" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""] autorelease];
             [item setTarget:self];
             [[editMenuItem submenu] addItem:item];
         }
@@ -154,7 +158,7 @@ static NSMutableCharacterSet *staticEscapeChars;
             [item setTarget:self];
             [[editMenuItem submenu] addItem:item];
         }
-        
+
         //		NSMenuItem *insertColorMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Insert Color..." action:@selector(insertColor:) keyEquivalent:@""] autorelease];
         //		[insertColorMenuItem setTarget:self];
         //		[[editMenuItem submenu] addItem:insertColorMenuItem];
@@ -239,7 +243,7 @@ static NSMutableCharacterSet *staticEscapeChars;
                 if(oldLocation != _selectedStringRange.location) {
                     [self dismissPopover];
                 }
-                
+
                 // Color calculations based ion Xcode theme
 				NSColor *backgroundColor = [self.textView.backgroundColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
 				CGFloat r = 1.0; CGFloat g = 1.0; CGFloat b = 1.0;
@@ -271,7 +275,7 @@ static NSMutableCharacterSet *staticEscapeChars;
 				self.stringFrameView.frame = NSInsetRect(NSIntegralRect(selectionRectInView), -1, -1);
 				self.stringFrameView.color = strokeColor;
 				[self.textView addSubview:self.stringFrameView];
-                
+
                 return;
 			}
 		}
@@ -284,11 +288,11 @@ static NSMutableCharacterSet *staticEscapeChars;
         [_stringPopover close];
         [_stringPopover autorelease];
         _stringPopover = nil;
-    }	 
+    }
 }
 
 - (void)removeSelection {
-    [self dismissPopover];    
+    [self dismissPopover];
 	[self.stringButton removeFromSuperview];
 	[self.stringFrameView removeFromSuperview];
 	self.selectedStringRange = NSNullRange;
