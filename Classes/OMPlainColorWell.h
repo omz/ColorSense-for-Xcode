@@ -13,6 +13,6 @@
 	NSColor *_strokeColor;
 }
 
-@property (nonatomic, retain) NSColor *strokeColor;
+@property (nonatomic, strong) NSColor *strokeColor;
 
 @end
