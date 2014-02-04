@@ -9,6 +9,7 @@
 #import "OMColorHelper.h"
 #import "OMPlainColorWell.h"
 #import "OMColorFrameView.h"
+#import "NSColor+SSToolkitAdditions.h"
 
 #define kOMColorHelperHighlightingDisabled	@"OMColorHelperHighlightingDisabled"
 #define kOMColorHelperInsertionMode			@"OMColorHelperInsertionMode"
@@ -33,25 +34,25 @@
 	if (self = [super init]) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
 		_selectedColorRange = NSMakeRange(NSNotFound, 0);
-		_constantColorsByName = [[NSDictionary alloc] initWithObjectsAndKeys:
-								 [[NSColor blackColor] colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]], @"black",
-								 [NSColor darkGrayColor], @"darkGray",
-								 [NSColor lightGrayColor], @"lightGray",
-								 [[NSColor whiteColor] colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]], @"white",
-								 [NSColor grayColor], @"gray",
-								 [NSColor redColor], @"red",
-								 [NSColor greenColor], @"green",
-								 [NSColor blueColor], @"blue",
-								 [NSColor cyanColor], @"cyan",
-								 [NSColor yellowColor], @"yellow",
-								 [NSColor magentaColor], @"magenta",
-								 [NSColor orangeColor], @"orange",
-								 [NSColor purpleColor], @"purple",
-								 [NSColor brownColor], @"brown",
-								 [[NSColor clearColor] colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]], @"clear", nil];
+		_constantColorsByName = [@{@"black": [[NSColor blackColor] colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]],
+                                 @"darkGray": [NSColor darkGrayColor],
+                                 @"lightGray": [NSColor lightGrayColor],
+                                 @"white": [[NSColor whiteColor] colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]],
+                                 @"gray": [NSColor grayColor],
+                                 @"red": [NSColor redColor],
+                                 @"green": [NSColor greenColor],
+                                 @"blue": [NSColor blueColor],
+                                 @"cyan": [NSColor cyanColor],
+                                 @"yellow": [NSColor yellowColor],
+                                 @"magenta": [NSColor magentaColor],
+                                 @"orange": [NSColor orangeColor],
+                                 @"purple": [NSColor purpleColor],
+                                 @"brown" : [NSColor brownColor],
+                                 @"clear" : [[NSColor clearColor] colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]]} retain];
 		
 		_rgbaUIColorRegex = [[NSRegularExpression regularExpressionWithPattern:@"(\\[\\s*UIColor\\s+colorWith|\\[\\s*\\[\\s*UIColor\\s+alloc\\]\\s*initWith)Red:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+green:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+blue:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL] retain];
 		_whiteUIColorRegex = [[NSRegularExpression regularExpressionWithPattern:@"(\\[\\s*UIColor\\s+colorWith|\\[\\s*\\[\\s*UIColor\\s+alloc\\]\\s*initWith)White:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL] retain];
+        _hexUIColorRegex = [NSRegularExpression regularExpressionWithPattern:@"\\[\\s*UIColor\\s*colorWithHex:\\s*@\"(\\w*)\\s*\"\\s*]" options:0 error:NULL];
 		_rgbaNSColorRegex = [[NSRegularExpression regularExpressionWithPattern:@"\\[\\s*NSColor\\s+colorWith(Calibrated|Device)Red:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+green:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+blue:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL] retain];
 		_whiteNSColorRegex = [[NSRegularExpression regularExpressionWithPattern:@"\\[\\s*NSColor\\s+colorWith(Calibrated|Device)White:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL] retain];
 		_constantColorRegex = [[NSRegularExpression regularExpressionWithPattern:@"\\[\\s*(UI|NS)Color\\s+(black|darkGray|lightGray|white|gray|red|green|blue|cyan|yellow|magenta|orange|purple|brown|clear)Color\\s*\\]" options:0 error:NULL] retain];
@@ -424,6 +425,20 @@
 			}
 		}];
 	}
+    
+    if (!foundColor) {
+        [_hexUIColorRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+			NSRange colorRange = [result range];
+			if (selectedRange.location >= colorRange.location && NSMaxRange(selectedRange) <= NSMaxRange(colorRange)) {
+                foundColorType = OMColorTypeUIHex;
+				
+                NSString *color = [text substringWithRange:[result rangeAtIndex:1]];
+				foundColor = [NSColor colorWithHex:color];
+				foundColorRange = colorRange;
+				*stop = YES;
+			}
+		}];
+    }
 	
 	if (foundColor) {
 		if (matchedRange != NULL) {
@@ -469,7 +484,9 @@
 			}
 		}
 		if (!colorString) {
-			if (fabs(red - green) < 0.001 && fabs(green - blue) < 0.001) {
+            if (colorType == OMColorTypeUIHex) {
+                colorString = [NSString stringWithFormat:@"[UIColor colorWithHex:@\"%@\"]", [color hexValueWithAlpha:(color.alphaComponent < 1)]];
+            } else if (fabs(red - green) < 0.001 && fabs(green - blue) < 0.001) {
 				if (colorType == OMColorTypeUIRGBA || colorType == OMColorTypeUIWhite || colorType == OMColorTypeUIConstant) {
 					colorString = [NSString stringWithFormat:@"[UIColor colorWithWhite:%.3f alpha:%.3f]", red, alpha];
 				} else if (colorType == OMColorTypeUIRGBAInit || colorType == OMColorTypeUIWhiteInit) {
