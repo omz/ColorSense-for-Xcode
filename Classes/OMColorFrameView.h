@@ -13,6 +13,6 @@
 	NSColor *_color;
 }
 
-@property (nonatomic, retain) NSColor *color;
+@property (nonatomic, strong) NSColor *color;
 
 @end
