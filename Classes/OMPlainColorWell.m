@@ -36,16 +36,10 @@
 - (void)setStrokeColor:(NSColor *)strokeColor
 {
 	if (strokeColor != _strokeColor) {
-		[_strokeColor release];
-		_strokeColor = [strokeColor retain];
+		_strokeColor = strokeColor;
 		[self setNeedsDisplay:YES];
 	}
 }
 
-- (void)dealloc
-{
-	[_strokeColor release];
-	[super dealloc];
-}
 
 @end

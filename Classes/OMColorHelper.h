@@ -48,9 +48,9 @@ BOOL OMColorTypeIsNSColor(OMColorType colorType) { return colorType >= OMColorTy
 	NSRegularExpression *_constantColorRegex;
 }
 
-@property (nonatomic, retain) OMPlainColorWell *colorWell;
-@property (nonatomic, retain) OMColorFrameView *colorFrameView;
-@property (nonatomic, retain) NSTextView *textView;
+@property (nonatomic, strong) OMPlainColorWell *colorWell;
+@property (nonatomic, strong) OMColorFrameView *colorFrameView;
+@property (nonatomic, strong) NSTextView *textView;
 @property (nonatomic, assign) NSRange selectedColorRange;
 @property (nonatomic, assign) OMColorType selectedColorType;
 
