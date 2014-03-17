@@ -6,11 +6,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface HOStringFrameView : NSView {
+@interface HOStringFrameView : NSView
 
-	NSColor *_color;
-}
-
-@property (nonatomic, retain) NSColor *color;
+@property (nonatomic, strong) NSColor *color;
 
 @end

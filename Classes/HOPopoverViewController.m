@@ -8,11 +8,9 @@
 
 @implementation HOPopoverViewController
 
-@synthesize delegate = _delegate;
-
 - (NSView *)view {
     if(!_textField) {
-        _textField = [[[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
+        _textField = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)];
         _textField.focusRingType = NSFocusRingTypeNone;
         _textField.bordered = NO;
         _textField.backgroundColor = [NSColor colorWithCalibratedWhite:0.974 alpha:1.000];
@@ -24,8 +22,6 @@
 
 - (void)dealloc {
     _delegate = nil;
-    [_textField release];
-    [super dealloc];
 }
 
 - (void)controlTextDidChange:(NSNotification *)obj {

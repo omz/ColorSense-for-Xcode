@@ -6,9 +6,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface HOStringInfoButton : NSButton {
-    NSColor *_strokeColor;
-}
+@interface HOStringInfoButton : NSButton
 
 @property (copy, nonatomic) NSColor *strokeColor;
 

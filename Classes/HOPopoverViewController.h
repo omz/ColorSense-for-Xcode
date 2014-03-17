@@ -8,9 +8,8 @@
 
 @interface HOPopoverViewController : NSViewController <NSTextFieldDelegate> {
     NSTextField *_textField;
-    id _delegate;
 }
 
-@property (assign, nonatomic) id delegate;
+@property (weak, nonatomic) id delegate;
 
 @end

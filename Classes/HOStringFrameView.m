@@ -8,8 +8,6 @@
 
 @implementation HOStringFrameView
 
-@synthesize color=_color;
-
 - (void)drawRect:(NSRect)dirtyRect
 {
 	[self.color setStroke];
@@ -19,16 +17,10 @@
 - (void)setColor:(NSColor *)color
 {
 	if (color != _color) {
-		[_color release];
-		_color = [color retain];
+		_color = color;
 		[self setNeedsDisplay:YES];
 	}
 }
 
-- (void)dealloc
-{
-	[_color release];
-	[super dealloc];
-}
 
 @end

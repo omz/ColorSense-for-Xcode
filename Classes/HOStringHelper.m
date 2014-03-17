@@ -15,12 +15,6 @@
 
 @implementation HOStringHelper
 
-@synthesize stringButton = _stringButton;
-@synthesize stringFrameView = _stringFrameView;
-@synthesize textView = _textView;
-@synthesize selectedStringRange = _selectedStringRange;
-@synthesize selectedStringContent=_selectedStringContent;
-
 #pragma mark - String Helper
 
 - (NSString *)escapeString:(NSString *)string {
@@ -125,9 +119,9 @@
 	if (self = [super init]) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
 		_selectedStringRange = NSMakeRange(NSNotFound, 0);
-        _stringRegex = [[NSRegularExpression regularExpressionWithPattern:@"\"((\\\\\"|.)*?)\""
+        _stringRegex = [NSRegularExpression regularExpressionWithPattern:@"\"((\\\\\"|.)*?)\""
                                                                   options:0
-                                                                    error:NULL] retain];
+                                                                    error:NULL];
 	}
 	return self;
 }
@@ -138,13 +132,13 @@
 		[[editMenuItem submenu] addItem:[NSMenuItem separatorItem]];
 
         {
-            NSMenuItem *item = [[[NSMenuItem alloc] initWithTitle:@"" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""] autorelease];
+            NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@"" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""];
             [item setTarget:self];
             [[editMenuItem submenu] addItem:item];
         }
 
         {
-            NSMenuItem *item = [[[NSMenuItem alloc] initWithTitle:@"Show Strings Popover" action:@selector(showPopover:) keyEquivalent:@""] autorelease];
+            NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@"Show Strings Popover" action:@selector(showPopover:) keyEquivalent:@""];
             [item setTarget:self];
             [[editMenuItem submenu] addItem:item];
         }
@@ -252,12 +246,12 @@
                 // Button's label
                 NSString * aString = [NSString stringWithFormat:@"%d", (int)[[self unescapeString:_selectedStringContent] length]];
                 NSMutableDictionary * aAttributes = [NSMutableDictionary dictionary];
-                NSMutableParagraphStyle * aStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease];
+                NSMutableParagraphStyle * aStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
                 aStyle.alignment = NSCenterTextAlignment;
                 [aAttributes setValue:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
                 [aAttributes setValue:[NSFont boldSystemFontOfSize:11] forKey:NSFontAttributeName];
                 [aAttributes setValue:aStyle forKey:NSParagraphStyleAttributeName];
-                NSAttributedString * aAttributedString = [[[NSAttributedString alloc] initWithString:aString attributes:aAttributes] autorelease];
+                NSAttributedString * aAttributedString = [[NSAttributedString alloc] initWithString:aString attributes:aAttributes];
                 self.stringButton.attributedTitle = aAttributedString;
                 self.stringButton.strokeColor = strokeColor;
 				[self.textView addSubview:self.stringButton];
@@ -320,7 +314,7 @@
     }
     [self dismissPopover];
     if(!_stringPopoverViewController) {
-        _stringPopoverViewController = [[[HOPopoverViewController alloc] init] autorelease];
+        _stringPopoverViewController = [[HOPopoverViewController alloc] init];
         _stringPopoverViewController.delegate = self;
     }
     NSTextField *textfield = (id)_stringPopoverViewController.view;
@@ -383,13 +377,6 @@
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
     [self dismissPopover];
-    [_stringPopoverViewController release];
-    [_selectedStringContent release];
-	[_stringButton release];
-	[_stringFrameView release];
-	[_textView release];
-    [_stringRegex release];
-	[super dealloc];
 }
 
 @end
