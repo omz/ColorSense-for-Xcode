@@ -6,9 +6,15 @@ Perfect for editing regular expressions, multi line texts, inline HTML and many 
 
 ## Installation
 
-Simply build the Xcode project and restart Xcode. The plugin will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. First remove the plugin from there (and restart Xcode).
+**Compatible with Xcode 5.1**
 
-If you get a "Permission Denied" error while building, please see [this issue](https://github.com/omz/ColorSense-for-Xcode/issues/1).
+There are two ways:
+
+1. Build the Xcode project and restart Xcode. The plugin will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. First remove the plugin from there (and restart Xcode).
+
+   If you get a "Permission Denied" error while building, please see [this issue](https://github.com/omz/ColorSense-for-Xcode/issues/1).
+
+1. Use [**Alcatraz**, the package manager for Xcode](http://alcatraz.io/) (Attention, you'll need to have MacOS 10.9 installed!)
 
 ## Keyboard Shortcut
 
