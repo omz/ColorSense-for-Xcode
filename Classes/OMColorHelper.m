@@ -439,6 +439,8 @@ const NSInteger OMColorPandelHexMode = 65535;
     if (!foundColor) {
         [_rgbHexUIColorRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 			NSRange colorRange = [result range];
+
+            if ([result rangeAtIndex:1].location != NSNotFound)
 			if (selectedRange.location >= colorRange.location && NSMaxRange(selectedRange) <= NSMaxRange(colorRange)) {
 				NSString *hexString = [text substringWithRange:[result rangeAtIndex:1]];
 
@@ -458,6 +460,8 @@ const NSInteger OMColorPandelHexMode = 65535;
     if (!foundColor) {
         [_rgbHexAlphaUIColorRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 			NSRange colorRange = [result range];
+
+            if ([result rangeAtIndex:1].location != NSNotFound && [result rangeAtIndex:2].location != NSNotFound)
 			if (selectedRange.location >= colorRange.location && NSMaxRange(selectedRange) <= NSMaxRange(colorRange)) {
 				NSString *hexString = [text substringWithRange:[result rangeAtIndex:1]];
                 
