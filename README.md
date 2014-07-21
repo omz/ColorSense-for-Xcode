@@ -6,7 +6,7 @@ Perfect for editing regular expressions, multi line texts, inline HTML and many 
 
 ## Installation
 
-**Compatible with Xcode 5.1**
+**Compatible with Xcode 6**
 
 There are two ways:
 
@@ -32,7 +32,7 @@ This work is derived from the awesome [Color Sense](https://github.com/omz/Color
 
 ## License
 
-    Copyright (c) 2012, Dirk Holtwick
+    Copyright (c) 2012-2014, Dirk Holtwick
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
