@@ -132,7 +132,7 @@
 		[[editMenuItem submenu] addItem:[NSMenuItem separatorItem]];
 
         {
-            NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@"" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""];
+            NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@"Enable Strings Popover" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""];
             [item setTarget:self];
             [[editMenuItem submenu] addItem:item];
         }
