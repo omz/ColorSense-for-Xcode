@@ -2,8 +2,7 @@
 //  OMColorHelper.m OMColorHelper Created by Ole Zorn on 09/07/12.
 
 #import "OMColorHelper.h"
-#import "OMPlainColorWell.h"
-#import "OMColorFrameView.h"
+#import "OMColorViews.h"
 
 #define kOMColorHelperHighlightingDisabled	@"OMColorHelperHighlightingDisabled"
 #define kOMColorHelperInsertionMode         @"OMColorHelperInsertionMode"
@@ -13,8 +12,6 @@
 
 @implementation OMColorHelper {
 
-
-
   NSDictionary        * _constantColorsByName;
 	NSRegularExpression * _rgbaUIColorRegex,
                       * _rgbaNSColorRegex,
@@ -23,13 +20,9 @@
                       * _constantColorRegex;
 }
 
-
-//@synthesize colorWell=_colorWell, colorFrameView=_colorFrameView, textView=_textView, selectedColorRange=_selectedColorRange, selectedColorType=_selectedColorType;
-
 #pragma mark - Plugin Initialization
 
-+ (void)pluginDidLoad:(NSBundle *)plugin {
-
++ (void) pluginDidLoad:(NSBundle *)plugin {
 
 	static id sharedPlugin = nil;
 	static dispatch_once_t onceToken;
@@ -112,7 +105,7 @@
 
 #pragma mark - Preferences
 
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+- (BOOL) validateMenuItem:(NSMenuItem *)menuItem {
 
 
 	if (menuItem.action == @selector(insertColor:)) {
@@ -138,19 +131,19 @@
 	return YES;
 }
 
-- (void)selectNSColorInsertionMode:_ {
+- (void) selectNSColorInsertionMode:_ {
 
 
 	[kUSRDEFS setInteger:1 forKey:kOMColorHelperInsertionMode];
 }
 
-- (void)selectUIColorInsertionMode:_ {
+- (void) selectUIColorInsertionMode:_ {
 
 
 	[kUSRDEFS  setInteger:0 forKey:kOMColorHelperInsertionMode];
 }
 
-- (void)toggleColorHighlightingEnabled:_ {
+- (void) toggleColorHighlightingEnabled:_ {
 
 
 	BOOL enabled = [kUSRDEFS  boolForKey:kOMColorHelperHighlightingDisabled];
@@ -159,7 +152,7 @@
   enabled ? [self activateColorHighlighting] : [self deactivateColorHighlighting];
 }
 
-- (void)activateColorHighlighting {
+- (void) activateColorHighlighting {
 
 
 	[kNCENTER addObserver:self selector:@selector(selectionDidChange:) name:NSTextViewDidChangeSelectionNotification object:nil];
@@ -174,7 +167,7 @@
                                                            object:self.textView]];
 }
 
-- (void)deactivateColorHighlighting {
+- (void) deactivateColorHighlighting {
 
 
 	[kNCENTER removeObserver:self name:NSTextViewDidChangeSelectionNotification object:nil];
@@ -184,35 +177,38 @@
 
 #pragma mark - Color Insertion
 
-- (void)insertColor:(id)sender {
-
+- (void) insertColor:_ {
 
 	if (!self.textView) {
-		NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
-		if ([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]) {
+
+		NSResponder *firstResponder = [NSApp keyWindow].firstResponder;
+		if ([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] &&
+        [firstResponder isKindOfClass:NSTextView.class])
+
 			self.textView = (NSTextView *)firstResponder;
-		} else {
-			NSBeep();
-			return;
-		}
+
+    else return NSBeep();
 	}
 	if ([kUSRDEFS  boolForKey:kOMColorHelperHighlightingDisabled]) {
 		//Inserting a color implicitly activates color highlighting:
 		[kUSRDEFS  setBool:NO forKey:kOMColorHelperHighlightingDisabled];
 		[self activateColorHighlighting];
 	}
+
 	[self.textView.undoManager beginUndoGrouping];
-	NSInteger insertionMode = [kUSRDEFS  integerForKey:kOMColorHelperInsertionMode];
-	if (insertionMode == 0) {
-		[self.textView insertText:@"[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0]" replacementRange:self.textView.selectedRange];
-	} else {
-		[self.textView insertText:@"[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0]" replacementRange:self.textView.selectedRange];
-	}
+
+  NSInteger insertionMode = [kUSRDEFS  integerForKey:kOMColorHelperInsertionMode];
+
+  !insertionMode ? [self.textView insertText:@"[UIColor colorWithRed:1 green:0 blue:0 alpha:1]"
+                            replacementRange:self.textView.selectedRange]
+                 : [self.textView insertText:@"[NSColor colorWithCalibratedRed:1 green:0 blue:0 alpha:1]"
+                            replacementRange:self.textView.selectedRange];
+
 	[self.textView.undoManager endUndoGrouping];
 	[self performSelector:@selector(activateColorWell) withObject:nil afterDelay:0.0];
 }
 
-- (void)activateColorWell {
+- (void) activateColorWell {
 
 
 	[self.colorWell activate:YES];
@@ -220,63 +216,62 @@
 
 #pragma mark - Text Selection Handling
 
-- (void)selectionDidChange:(NSNotification *)notification {
+- (void) selectionDidChange:(NSNotification *)_ {
 
+	if (![_.object isKindOfClass:NSClassFromString(@"DVTSourceTextView")] ||
+      ![_.object isKindOfClass:NSTextView.class]) return;
 
-	if ([[notification object] isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [[notification object] isKindOfClass:[NSTextView class]]) {
-		self.textView = (NSTextView *)[notification object];
-		
-		BOOL disabled = [kUSRDEFS  boolForKey:kOMColorHelperHighlightingDisabled];
-		if (disabled) return;
-		
-		NSArray *selectedRanges = [self.textView selectedRanges];
-		if (selectedRanges.count >= 1) {
+  self.textView = (NSTextView *)_.object;
+  
+  BOOL disabled = [kUSRDEFS  boolForKey:kOMColorHelperHighlightingDisabled];
+  if  (disabled) return;
+  
+  NSArray *selectedRanges = self.textView.selectedRanges;
 
-      NSRange selectedRange       = [selectedRanges[0] rangeValue];
-      NSString *text              = self.textView.textStorage.string;
-      NSRange lineRange           = [text lineRangeForRange:selectedRange];
-      NSRange selectedRangeInLine = NSMakeRange(selectedRange.location - lineRange.location, selectedRange.length);
-      NSString *line              = [text substringWithRange:lineRange];
+  if      (selectedRanges.count < 1) return [self dismissColorWell];
 
-      NSRange colorRange          = NSMakeRange(NSNotFound, 0);
-      OMColorType colorType       = OMColorTypeNone;
-      NSColor *matchedColor       = [self colorInText:line      selectedRange:selectedRangeInLine
-                                                 type:&colorType matchedRange:&colorRange];
-			if (matchedColor) {
+  NSRange selectedRange       = [selectedRanges[0] rangeValue];
+  NSString *text              = self.textView.textStorage.string;
+  NSRange lineRange           = [text lineRangeForRange:selectedRange];
+  NSRange selectedRangeInLine = NSMakeRange(selectedRange.location - lineRange.location,
+                                            selectedRange.length);
+  NSString *line              = [text substringWithRange:lineRange];
+  NSRange colorRange          = NSMakeRange(NSNotFound, 0);
+  OMColorType colorType       = OMColorTypeNone;
+  NSColor *matchedColor       = [self colorInText:line      selectedRange:selectedRangeInLine
+                                             type:&colorType matchedRange:&colorRange];
 
-        NSColor *backgroundColor     = [self.textView.backgroundColor colorUsingColorSpace:NSColorSpace.genericRGBColorSpace];
+  if (!matchedColor) return [self dismissColorWell];
 
-        CGFloat r = 1, g = 1, b = 1;  [backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
+  NSColor *backgroundColor = [self.textView.backgroundColor
+              colorUsingColorSpace:NSColorSpace.genericRGBColorSpace];
 
-        CGFloat backgroundLuminance  = (r + g + b) / 3.0;
+  CGFloat r = 1, g = 1, b = 1;  [backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
 
-        NSColor *strokeColor         = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:.2 alpha:1]
-                                                                   : NSColor.whiteColor;
+  CGFloat backgroundLuminance  = (r + g + b) / 3.0;
 
-        self.selectedColorType       = colorType;
-        self.colorWell.color         = matchedColor;
-        self.colorWell.strokeColor   = strokeColor;
+  NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:.2 alpha:1]
+                                                     : NSColor.whiteColor;
+  self.selectedColorType       = colorType;
+  self.colorWell.color         = matchedColor;
+  self.colorWell.strokeColor   = strokeColor;
 
-        self.selectedColorRange = NSMakeRange(colorRange.location + lineRange.location, colorRange.length);
-        NSRect selectRectOnScrn = [self.textView firstRectForCharacterRange:self.selectedColorRange],
-                selectRectInWin = [self.textView.window convertRectFromScreen:selectRectOnScrn],
-               selectRectInView = [self.textView convertRect:selectRectInWin fromView:nil],
-                  colorWellRect = NSMakeRect(NSMaxX(selectRectInView) - 49,
-                                             NSMinY(selectRectInView) - selectRectInView.size.height - 2,
-                                             50,    selectRectInView.size.height + 2);
-        self.colorWell.frame      = NSIntegralRect(colorWellRect);
-        [self.textView addSubview:self.colorWell];
-        self.colorFrameView.frame = NSInsetRect(NSIntegralRect(selectRectInView), -1, -1);
-        self.colorFrameView.color = strokeColor;
+  self.selectedColorRange = NSMakeRange(colorRange.location + lineRange.location, colorRange.length);
+  NSRect selectRectOnScrn = [self.textView firstRectForCharacterRange:self.selectedColorRange],
+          selectRectInWin = [self.textView.window convertRectFromScreen:selectRectOnScrn],
+         selectRectInView = [self.textView convertRect:selectRectInWin fromView:nil],
+            colorWellRect = NSMakeRect(NSMaxX(selectRectInView) - 49,
+                                       NSMinY(selectRectInView) - selectRectInView.size.height - 2,
+                                       50,    selectRectInView.size.height + 2);
+  self.colorWell.frame      = NSIntegralRect(colorWellRect);
+  [self.textView addSubview:self.colorWell];
+  self.colorFrameView.frame = NSInsetRect(NSIntegralRect(selectRectInView), -1, -1);
+  self.colorFrameView.color = strokeColor;
 
-				[self.textView addSubview:self.colorFrameView];
-
-      } else [self dismissColorWell];
-		} else [self dismissColorWell];
-	}
+  [self.textView addSubview:self.colorFrameView];
 }
 
-- (void)dismissColorWell {
+- (void) dismissColorWell {
 
 
 	if (self.colorWell.isActive) {
@@ -289,7 +284,7 @@
 	self.selectedColorType  = OMColorTypeNone;
 }
 
-- (void)colorDidChange:_ {
+- (void) colorDidChange:_ {
 
 	if (self.selectedColorRange.location == NSNotFound) return;
 
@@ -303,7 +298,7 @@
 
 #pragma mark - View Initialization
 
-- (OMPlainColorWell *)colorWell {
+- (OMPlainColorWell*) colorWell {
 
 
 	if (!_colorWell) {
@@ -314,7 +309,7 @@
 	return _colorWell;
 }
 
-- (OMColorFrameView *)colorFrameView {
+- (OMColorFrameView*) colorFrameView {
 
 
 	if (!_colorFrameView) {
@@ -325,8 +320,8 @@
 
 #pragma mark - Color String Parsing
 
-- (NSColor *)colorInText:(NSString *)text   selectedRange:(NSRange)selectedRange
-                    type:(OMColorType *)type matchedRange:(NSRangePointer)matchedRange {
+- (NSColor*) colorInText:(NSString*)text   selectedRange:(NSRange)selectedRange
+                    type:(OMColorType*)type matchedRange:(NSRangePointer)matchedRange {
 
 
 	__block NSColor *foundColor = nil;
@@ -477,19 +472,17 @@
   return foundColor;
 }
 
-- (double)dividedValue:(double)value withDivisorRange:(NSRange)divisorRange inString:(NSString *)text {
+- (double) dividedValue:(double)value withDivisorRange:(NSRange)divisorRange inString:(NSString *)text {
 
-
-	if (divisorRange.location != NSNotFound) {
-		double divisor = [[[text substringWithRange:divisorRange] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/ "]] doubleValue];
-		if (divisor != 0) {
-			value /= divisor;
-		}
-	}
+	if (divisorRange.location == NSNotFound) return value;
+  double divisor = [[[text substringWithRange:divisorRange]
+              stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"/ "]]
+                                              doubleValue];
+  if (divisor) value /= divisor;
 	return value;
 }
 
-- (NSString *)colorStringForColor:(NSColor *)color withType:(OMColorType)colorType {
+- (NSString*) colorStringForColor:(NSColor*)color withType:(OMColorType)colorType {
 
 
 	NSString *colorString = nil;
@@ -543,6 +536,6 @@
     : colorString : colorString;
 }
 
-- (void)dealloc {	[kNCENTER removeObserver:self]; }
+- (void) dealloc {	[kNCENTER removeObserver:self]; }
 
 @end
