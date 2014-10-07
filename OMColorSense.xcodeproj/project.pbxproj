@@ -7,17 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7F6EE2BF15FA6F3B00BA114A /* OMColorFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6EE2BE15FA6F3B00BA114A /* OMColorFrameView.m */; };
-		7FDADE3A15FA6CA400A847E3 /* OMPlainColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FDADE3915FA6CA400A847E3 /* OMPlainColorWell.m */; };
+		7F6EE2BF15FA6F3B00BA114A /* OMColorViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6EE2BE15FA6F3B00BA114A /* OMColorViews.m */; };
 		DA37E2DC0E6291C8001BDFEF /* OMColorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA37E2DB0E6291C8001BDFEF /* OMColorHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7F2B355F15FA59D000DB3249 /* OMColorHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OMColorHelper.h; path = Classes/OMColorHelper.h; sourceTree = "<group>"; };
-		7F6EE2BD15FA6F3B00BA114A /* OMColorFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMColorFrameView.h; path = Classes/OMColorFrameView.h; sourceTree = "<group>"; };
-		7F6EE2BE15FA6F3B00BA114A /* OMColorFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OMColorFrameView.m; path = Classes/OMColorFrameView.m; sourceTree = "<group>"; };
-		7FDADE3815FA6CA400A847E3 /* OMPlainColorWell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMPlainColorWell.h; path = Classes/OMPlainColorWell.h; sourceTree = "<group>"; };
-		7FDADE3915FA6CA400A847E3 /* OMPlainColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OMPlainColorWell.m; path = Classes/OMPlainColorWell.m; sourceTree = "<group>"; };
+		7F6EE2BD15FA6F3B00BA114A /* OMColorViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OMColorViews.h; path = Classes/OMColorViews.h; sourceTree = "<group>"; };
+		7F6EE2BE15FA6F3B00BA114A /* OMColorViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OMColorViews.m; path = Classes/OMColorViews.m; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* OMColorSense.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OMColorSense.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA37E2DB0E6291C8001BDFEF /* OMColorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OMColorHelper.m; path = Classes/OMColorHelper.m; sourceTree = "<group>"; };
@@ -39,10 +36,8 @@
 			children = (
 				7F2B355F15FA59D000DB3249 /* OMColorHelper.h */,
 				DA37E2DB0E6291C8001BDFEF /* OMColorHelper.m */,
-				7F6EE2BD15FA6F3B00BA114A /* OMColorFrameView.h */,
-				7F6EE2BE15FA6F3B00BA114A /* OMColorFrameView.m */,
-				7FDADE3815FA6CA400A847E3 /* OMPlainColorWell.h */,
-				7FDADE3915FA6CA400A847E3 /* OMPlainColorWell.m */,
+				7F6EE2BD15FA6F3B00BA114A /* OMColorViews.h */,
+				7F6EE2BE15FA6F3B00BA114A /* OMColorViews.m */,
 				089C167CFE841241C02AAC07 /* Resources */,
 			);
 			name = QuietXcode;
@@ -110,8 +105,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA37E2DC0E6291C8001BDFEF /* OMColorHelper.m in Sources */,
-				7FDADE3A15FA6CA400A847E3 /* OMPlainColorWell.m in Sources */,
-				7F6EE2BF15FA6F3B00BA114A /* OMColorFrameView.m in Sources */,
+				7F6EE2BF15FA6F3B00BA114A /* OMColorViews.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
