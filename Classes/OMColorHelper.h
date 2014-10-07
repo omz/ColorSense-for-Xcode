@@ -15,14 +15,17 @@ typedef enum OMColorType {
 	OMColorTypeUIRGBA,				//[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0]
 	OMColorTypeUIRGBAInit,			//[[UIColor alloc] initWithRed:1.0 green:0.0 blue:0.0 alpha:1.0]
 	OMColorTypeUIWhite,				//[UIColor colorWithWhite:0.5 alpha:1.0]
+    OMColorTypeUIWhiteSwift,        //UIColor(white: 0.5, alpha: 1.0)
 	OMColorTypeUIWhiteInit,			//[[UIColor alloc] initWithWhite:0.5 alpha:1.0]
 	OMColorTypeUIConstant,			//[UIColor redColor]
+    OMColorTypeUIConstantSwift,		//UIColor.redColor()
 	OMColorTypeUIRGBASwift,         //UIColor(red: 0.670, green: 0.821, blue: 0.294, alpha: 1.0)
 	OMColorTypeNSRGBACalibrated,	//[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0]
 	OMColorTypeNSRGBADevice,		//[NSColor colorWithDeviceRed:1.0 green:0.0 blue:0.0 alpha:1.0]
 	OMColorTypeNSWhiteCalibrated,	//[NSColor colorWithCalibratedWhite:0.5 alpha:1.0]
 	OMColorTypeNSWhiteDevice,		//[NSColor colorWithDeviceWhite:0.5 alpha:1.0]
-	OMColorTypeNSConstant,			//[NSColor redColor]
+	OMColorTypeNSConstant,          //[NSColor redColor]
+    OMColorTypeNSConstantSwift,     //NSColor.redColor()
 	
 } OMColorType;
 
@@ -47,6 +50,8 @@ BOOL OMColorTypeIsNSColor(OMColorType colorType) { return colorType >= OMColorTy
 	NSRegularExpression *_whiteUIColorRegex;
 	NSRegularExpression *_constantColorRegex;
     NSRegularExpression *_rgbaUIColorSwiftRegex;
+    NSRegularExpression *_whiteUIColorSwiftRegex;
+    NSRegularExpression *_constantColorSwiftRegex;
 }
 
 @property (nonatomic, strong) OMPlainColorWell *colorWell;
