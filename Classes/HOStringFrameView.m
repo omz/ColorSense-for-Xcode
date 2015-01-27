@@ -11,7 +11,8 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
 	[self.color setStroke];
-	[NSBezierPath strokeRect:NSInsetRect(self.bounds, 0.5, 0.5)];
+	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(self.bounds, 0.5, 0.5) xRadius:3.0 yRadius:3.0];
+	[path stroke];
 }
 
 - (void)setColor:(NSColor *)color
