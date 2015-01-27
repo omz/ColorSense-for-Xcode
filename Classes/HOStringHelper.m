@@ -361,8 +361,10 @@
 	__block NSRange foundColorRange = NSMakeRange(NSNotFound, 0);
 	[_stringRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 		NSRange colorRange = [result range];
-		if (selectedRange.location >= colorRange.location && NSMaxRange(selectedRange) <= NSMaxRange(colorRange)) {
+		if (selectedRange.location >= colorRange.location + 1 && NSMaxRange(selectedRange) <= NSMaxRange(colorRange) - 1) {
 			foundStringContent = [text substringWithRange:[result rangeAtIndex:0]];
+			colorRange.location++;
+			colorRange.length -= 2;
 			foundColorRange = colorRange;
 			*stop = YES;
 		}
