@@ -234,26 +234,30 @@
 				CGFloat r = 1.0; CGFloat g = 1.0; CGFloat b = 1.0;
 				[backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
 				CGFloat backgroundLuminance = (r + g + b) / 3.0;
-				NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:0.5 alpha:1.000] : [NSColor colorWithCalibratedWhite:1.000 alpha:0.900];
+				NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:0.5 alpha:0.4] : [NSColor colorWithCalibratedWhite:1.000 alpha:0.4];
 
+				// Button's label
+				NSString * aString = [NSString stringWithFormat:@"%d", (int)[[self unescapeString:_selectedStringContent] length]];
+				NSMutableDictionary * aAttributes = [NSMutableDictionary dictionary];
+				NSMutableParagraphStyle * aStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+				aStyle.alignment = NSCenterTextAlignment;
+				[aAttributes setValue:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
+				[aAttributes setValue:[NSFont boldSystemFontOfSize:11] forKey:NSFontAttributeName];
+				[aAttributes setValue:aStyle forKey:NSParagraphStyleAttributeName];
+				NSAttributedString * aAttributedString = [[NSAttributedString alloc] initWithString:aString attributes:aAttributes];
+				self.stringButton.attributedTitle = aAttributedString;
+				self.stringButton.strokeColor = strokeColor;
+				
                 // Place button
 				NSRect selectionRectOnScreen = [self.textView firstRectForCharacterRange:self.selectedStringRange];
 				NSRect selectionRectInWindow = [self.textView.window convertRectFromScreen:selectionRectOnScreen];
 				NSRect selectionRectInView = [self.textView convertRect:selectionRectInWindow fromView:nil];
-                NSRect buttonRect = NSMakeRect(NSMinX(selectionRectInView), NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
+				
+				CGFloat Width = [aAttributedString size].width + 14;
+				NSRect buttonRect = NSMakeRect(NSMinX(selectionRectInView), NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, Width, selectionRectInView.size.height);
 				self.stringButton.frame = NSIntegralRect(buttonRect);
 
-                // Button's label
-                NSString * aString = [NSString stringWithFormat:@"%d", (int)[[self unescapeString:_selectedStringContent] length]];
-                NSMutableDictionary * aAttributes = [NSMutableDictionary dictionary];
-                NSMutableParagraphStyle * aStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-                aStyle.alignment = NSCenterTextAlignment;
-                [aAttributes setValue:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
-                [aAttributes setValue:[NSFont boldSystemFontOfSize:11] forKey:NSFontAttributeName];
-                [aAttributes setValue:aStyle forKey:NSParagraphStyleAttributeName];
-                NSAttributedString * aAttributedString = [[NSAttributedString alloc] initWithString:aString attributes:aAttributes];
-                self.stringButton.attributedTitle = aAttributedString;
-                self.stringButton.strokeColor = strokeColor;
+
 				[self.textView addSubview:self.stringButton];
 
                 // Draw the frame around the string
@@ -357,8 +361,10 @@
 	__block NSRange foundColorRange = NSMakeRange(NSNotFound, 0);
 	[_stringRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 		NSRange colorRange = [result range];
-		if (selectedRange.location >= colorRange.location && NSMaxRange(selectedRange) <= NSMaxRange(colorRange)) {
+		if (selectedRange.location >= colorRange.location + 1 && NSMaxRange(selectedRange) <= NSMaxRange(colorRange) - 1) {
 			foundStringContent = [text substringWithRange:[result rangeAtIndex:0]];
+			colorRange.location++;
+			colorRange.length -= 2;
 			foundColorRange = colorRange;
 			*stop = YES;
 		}

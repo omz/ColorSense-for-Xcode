@@ -18,21 +18,19 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
 	[NSGraphicsContext saveGraphicsState];
-	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(0, 0, self.bounds.size.width, self.bounds.size.height ) xRadius:5.0 yRadius:5.0];
+	NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(0, 0, self.bounds.size.width, self.bounds.size.height ) xRadius:3.0 yRadius:3.0];
 	[path addClip];
-
-    [[NSColor colorWithCalibratedWhite:0.500 alpha:1.000] setFill];
-    NSRectFill(self.bounds);
-    [super drawRect:dirtyRect];
+	if (self.strokeColor) {
+		[self.strokeColor set];
+	}
+	else {
+		[[NSColor colorWithCalibratedWhite:0.500 alpha:0.500] setFill];
+	}
+	[path fill];
+	[super drawRect:dirtyRect];
 
 	// [self drawWellInside:self.bounds];
 	[NSGraphicsContext restoreGraphicsState];
-
-    if (self.strokeColor) {
-        NSBezierPath *strokePath = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(NSMakeRect(0, 0, self.bounds.size.width, self.bounds.size.height), 0.5, 0.5) xRadius:5.0 yRadius:5.0];
-        [self.strokeColor setStroke];
-        [strokePath stroke];
-    }
 }
 
 - (void)setStrokeColor:(NSColor *)strokeColor {
