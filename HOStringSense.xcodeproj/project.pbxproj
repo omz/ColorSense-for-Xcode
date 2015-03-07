@@ -199,7 +199,7 @@
 			name = HOStringSenseUnitTests;
 			productName = HOStringSenseUnitTests;
 			productReference = 435286B41677D87200A7E837 /* HOStringSenseUnitTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 		8D5B49AC048680CD000E48DA /* HOStringSense */ = {
 			isa = PBXNativeTarget;
@@ -226,6 +226,7 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastTestingUpgradeCheck = 0610;
 				LastUpgradeCheck = 0510;
 			};
 			buildConfigurationList = 1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "HOStringSense" */;

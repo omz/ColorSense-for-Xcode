@@ -108,28 +108,28 @@
 #pragma mark - Plugin Initialization
 
 + (void)pluginDidLoad:(NSBundle *)plugin {
-	static id sharedPlugin = nil;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		sharedPlugin = [[self alloc] init];
-	});
+    static id sharedPlugin = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedPlugin = [[self alloc] init];
+    });
 }
 
 - (id)init {
-	if (self = [super init]) {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
-		_selectedStringRange = NSMakeRange(NSNotFound, 0);
+    if (self = [super init]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:NSApplicationDidFinishLaunchingNotification object:nil];
+        _selectedStringRange = NSMakeRange(NSNotFound, 0);
         _stringRegex = [NSRegularExpression regularExpressionWithPattern:@"\"((\\\\\"|.)*?)\""
-                                                                  options:0
-                                                                    error:NULL];
-	}
-	return self;
+                                                                 options:0
+                                                                   error:NULL];
+    }
+    return self;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
-	NSMenuItem *editMenuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
-	if (editMenuItem) {
-		[[editMenuItem submenu] addItem:[NSMenuItem separatorItem]];
+    NSMenuItem *editMenuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
+    if (editMenuItem) {
+        [[editMenuItem submenu] addItem:[NSMenuItem separatorItem]];
 
         {
             NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@"Enable Strings Popover" action:@selector(toggleColorHighlightingEnabled:) keyEquivalent:@""];
@@ -146,130 +146,131 @@
         //		NSMenuItem *insertColorMenuItem = [[[NSMenuItem alloc] initWithTitle:@"Insert Color..." action:@selector(insertColor:) keyEquivalent:@""] autorelease];
         //		[insertColorMenuItem setTarget:self];
         //		[[editMenuItem submenu] addItem:insertColorMenuItem];
-	}
+    }
 
-	BOOL highlightingEnabled = ![[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
-	if (highlightingEnabled) {
+    BOOL highlightingEnabled = ![[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
+    if (highlightingEnabled) {
         [self activateColorHighlighting];
-	}
+    }
 }
 
 #pragma mark - Preferences
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
-	if ([menuItem action] == @selector(showPopover:)) {
+    if ([menuItem action] == @selector(showPopover:)) {
         return ![_stringPopover isShown];
-	}
-    else if ([menuItem action] == @selector(toggleColorHighlightingEnabled:)) {
-		BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
-		[menuItem setState:enabled ? NSOffState : NSOnState];
-		return YES;
     }
-	return YES;
+    else if ([menuItem action] == @selector(toggleColorHighlightingEnabled:)) {
+        BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
+        [menuItem setState:enabled ? NSOffState : NSOnState];
+        return YES;
+    }
+    return YES;
 }
 
 - (void)toggleColorHighlightingEnabled:(id)sender {
-	BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
-	[[NSUserDefaults standardUserDefaults] setBool:!enabled forKey:kHOStringHelperHighlightingDisabled];
-	if (enabled) {
-		[self activateColorHighlighting];
-	} else {
-		[self deactivateColorHighlighting];
-	}
+    BOOL enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
+    [[NSUserDefaults standardUserDefaults] setBool:!enabled forKey:kHOStringHelperHighlightingDisabled];
+    if (enabled) {
+        [self activateColorHighlighting];
+    } else {
+        [self deactivateColorHighlighting];
+    }
 }
 
 - (void)activateColorHighlighting {
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectionDidChange:) name:NSTextViewDidChangeSelectionNotification object:nil];
-	if (!self.textView) {
-		NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
-		if ([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]) {
-			self.textView = (NSTextView *)firstResponder;
-		}
-	}
-	if (self.textView) {
-		NSNotification *notification = [NSNotification notificationWithName:NSTextViewDidChangeSelectionNotification object:self.textView];
-		[self selectionDidChange:notification];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectionDidChange:) name:NSTextViewDidChangeSelectionNotification object:nil];
+    if (!self.textView) {
+        NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
+        if ([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]) {
+            self.textView = (NSTextView *)firstResponder;
+        }
+    }
+    if (self.textView) {
+        NSNotification *notification = [NSNotification notificationWithName:NSTextViewDidChangeSelectionNotification object:self.textView];
+        [self selectionDidChange:notification];
 
-	}
+    }
 }
 
 - (void)deactivateColorHighlighting {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSTextViewDidChangeSelectionNotification object:nil];
-	[self dismissPopover];
-	self.textView = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSTextViewDidChangeSelectionNotification object:nil];
+    [self dismissPopover];
+    self.textView = nil;
 }
 
 #pragma mark - Text Selection Handling
 
 - (void)selectionDidChange:(NSNotification *)notification {
     //    NSLog(@"%s", __PRETTY_FUNCTION__);
-	if ([[notification object] isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [[notification object] isKindOfClass:[NSTextView class]]) {
-		self.textView = (NSTextView *)[notification object];
-		BOOL disabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
-		if (disabled) {
+    if ([[notification object] isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [[notification object] isKindOfClass:[NSTextView class]]) {
+        self.textView = (NSTextView *)[notification object];
+        BOOL disabled = [[NSUserDefaults standardUserDefaults] boolForKey:kHOStringHelperHighlightingDisabled];
+        if (disabled) {
             return;
         }
-		NSArray *selectedRanges = [self.textView selectedRanges];
-		if (selectedRanges.count >= 1) {
-			NSRange selectedRange = [[selectedRanges objectAtIndex:0] rangeValue];
-			NSString *text = self.textView.textStorage.string;
-			NSRange lineRange = [text lineRangeForRange:selectedRange];
-			NSRange selectedRangeInLine = NSMakeRange(selectedRange.location - lineRange.location, selectedRange.length);
-			NSString *line = [text substringWithRange:lineRange];
-			NSRange stringRange = NSNullRange;
+        NSArray *selectedRanges = [self.textView selectedRanges];
+        if (selectedRanges.count >= 1) {
+            NSRange selectedRange = [[selectedRanges objectAtIndex:0] rangeValue];
+            NSString *text = self.textView.textStorage.string;
+            NSRange lineRange = [text lineRangeForRange:selectedRange];
+            NSRange selectedRangeInLine = NSMakeRange(selectedRange.location - lineRange.location, selectedRange.length);
+            NSString *line = [text substringWithRange:lineRange];
+            NSRange stringRange = NSNullRange;
 
             self.selectedStringContent = [self stringInText:line selectedRange:selectedRangeInLine matchedRange:&stringRange];
-			if (_selectedStringContent && [_selectedStringContent length] >= 2) {
+            if (_selectedStringContent && [_selectedStringContent length] >= 2) {
 
                 // String's content
                 NSInteger oldLocation = _selectedStringRange.location;
                 self.selectedStringContent = [_selectedStringContent substringWithRange:NSMakeRange(1, _selectedStringContent.length - 2)];
-				self.selectedStringRange = NSMakeRange(stringRange.location + lineRange.location, stringRange.length);
+                self.selectedStringRange = NSMakeRange(stringRange.location + lineRange.location, stringRange.length);
                 if(oldLocation != _selectedStringRange.location) {
                     [self dismissPopover];
                 }
 
                 // Color calculations based ion Xcode theme
-				NSColor *backgroundColor = [self.textView.backgroundColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
-				CGFloat r = 1.0; CGFloat g = 1.0; CGFloat b = 1.0;
-				[backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
-				CGFloat backgroundLuminance = (r + g + b) / 3.0;
-				NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:0.5 alpha:0.4] : [NSColor colorWithCalibratedWhite:1.000 alpha:0.4];
+                NSColor *backgroundColor = [self.textView.backgroundColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
+                CGFloat r = 1.0; CGFloat g = 1.0; CGFloat b = 1.0;
+                [backgroundColor getRed:&r green:&g blue:&b alpha:NULL];
+                CGFloat backgroundLuminance = (r + g + b) / 3.0;
+                NSColor *strokeColor = (backgroundLuminance > 0.5) ? [NSColor colorWithCalibratedWhite:0.5 alpha:1] : [NSColor colorWithCalibratedWhite:1.000 alpha:1];
 
-				// Button's label
-				NSString * aString = [NSString stringWithFormat:@"%d", (int)[[self unescapeString:_selectedStringContent] length]];
-				NSMutableDictionary * aAttributes = [NSMutableDictionary dictionary];
-				NSMutableParagraphStyle * aStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-				aStyle.alignment = NSCenterTextAlignment;
-				[aAttributes setValue:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
-				[aAttributes setValue:[NSFont boldSystemFontOfSize:11] forKey:NSFontAttributeName];
-				[aAttributes setValue:aStyle forKey:NSParagraphStyleAttributeName];
-				NSAttributedString * aAttributedString = [[NSAttributedString alloc] initWithString:aString attributes:aAttributes];
-				self.stringButton.attributedTitle = aAttributedString;
-				self.stringButton.strokeColor = strokeColor;
-				
+                // Button's label
+                NSString * aString = [NSString stringWithFormat:@"%d", (int)[[self unescapeString:_selectedStringContent] length]];
+                NSMutableDictionary * aAttributes = [NSMutableDictionary dictionary];
+                NSMutableParagraphStyle * aStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+                aStyle.alignment = NSCenterTextAlignment;
+                [aAttributes setValue:(backgroundLuminance > 0.5) ? [NSColor whiteColor] : [NSColor blackColor]
+                               forKey:NSForegroundColorAttributeName];
+                [aAttributes setValue:[NSFont boldSystemFontOfSize:11] forKey:NSFontAttributeName];
+                [aAttributes setValue:aStyle forKey:NSParagraphStyleAttributeName];
+                NSAttributedString * aAttributedString = [[NSAttributedString alloc] initWithString:aString attributes:aAttributes];
+                self.stringButton.attributedTitle = aAttributedString;
+                self.stringButton.strokeColor = strokeColor;
+
                 // Place button
-				NSRect selectionRectOnScreen = [self.textView firstRectForCharacterRange:self.selectedStringRange];
-				NSRect selectionRectInWindow = [self.textView.window convertRectFromScreen:selectionRectOnScreen];
-				NSRect selectionRectInView = [self.textView convertRect:selectionRectInWindow fromView:nil];
-				
-				CGFloat Width = [aAttributedString size].width + 14;
-				NSRect buttonRect = NSMakeRect(NSMinX(selectionRectInView), NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, Width, selectionRectInView.size.height);
-				self.stringButton.frame = NSIntegralRect(buttonRect);
+                NSRect selectionRectOnScreen = [self.textView firstRectForCharacterRange:self.selectedStringRange];
+                NSRect selectionRectInWindow = [self.textView.window convertRectFromScreen:selectionRectOnScreen];
+                NSRect selectionRectInView = [self.textView convertRect:selectionRectInWindow fromView:nil];
+
+                CGFloat Width = [aAttributedString size].width + 14;
+                NSRect buttonRect = NSMakeRect(NSMinX(selectionRectInView), NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, Width, selectionRectInView.size.height);
+                self.stringButton.frame = NSIntegralRect(buttonRect);
 
 
-				[self.textView addSubview:self.stringButton];
+                [self.textView addSubview:self.stringButton];
 
                 // Draw the frame around the string
-				self.stringFrameView.frame = NSInsetRect(NSIntegralRect(selectionRectInView), -1, -1);
-				self.stringFrameView.color = strokeColor;
-				[self.textView addSubview:self.stringFrameView];
+                self.stringFrameView.frame = NSInsetRect(NSIntegralRect(selectionRectInView), -1, -1);
+                self.stringFrameView.color = strokeColor;
+                [self.textView addSubview:self.stringFrameView];
 
                 return;
-			}
-		}
+            }
+        }
         [self removeSelection];
-	}
+    }
 }
 
 - (void)dismissPopover {
@@ -282,17 +283,17 @@
 - (void)removeSelection {
     //    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self dismissPopover];
-	[self.stringButton removeFromSuperview];
-	[self.stringFrameView removeFromSuperview];
-	self.selectedStringRange = NSNullRange;
-	self.selectedStringContent = nil;
+    [self.stringButton removeFromSuperview];
+    [self.stringFrameView removeFromSuperview];
+    self.selectedStringRange = NSNullRange;
+    self.selectedStringContent = nil;
 }
 
 - (void)stringDidChange:(id)sender {
     //    NSLog(@"%s", __PRETTY_FUNCTION__);
-	if (self.selectedStringRange.location == NSNotFound) {
-		return;
-	}
+    if (self.selectedStringRange.location == NSNotFound) {
+        return;
+    }
     NSTextField *textfield = (id)_stringPopoverViewController.view;
     NSString *result = textfield.stringValue;
     if(result) {
@@ -339,49 +340,49 @@
 #pragma mark - View Initialization
 
 - (HOStringInfoButton *)stringButton {
-	if (!_stringButton) {
-		_stringButton = [[HOStringInfoButton alloc] initWithFrame:NSMakeRect(0, 0, 100, 30)];
-		[_stringButton setTarget:self];
-		[_stringButton setAction:@selector(showPopover:)];
-	}
-	return _stringButton;
+    if (!_stringButton) {
+        _stringButton = [[HOStringInfoButton alloc] initWithFrame:NSMakeRect(0, 0, 100, 30)];
+        [_stringButton setTarget:self];
+        [_stringButton setAction:@selector(showPopover:)];
+    }
+    return _stringButton;
 }
 
 - (HOStringFrameView *)stringFrameView {
-	if (!_stringFrameView) {
-		_stringFrameView = [[HOStringFrameView alloc] initWithFrame:NSZeroRect];
-	}
-	return _stringFrameView;
+    if (!_stringFrameView) {
+        _stringFrameView = [[HOStringFrameView alloc] initWithFrame:NSZeroRect];
+    }
+    return _stringFrameView;
 }
 
 #pragma mark - Color String Parsing
 
 - (NSString *)stringInText:(NSString *)text selectedRange:(NSRange)selectedRange matchedRange:(NSRangePointer)matchedRange {
-	__block NSString *foundStringContent = nil;
-	__block NSRange foundColorRange = NSMakeRange(NSNotFound, 0);
-	[_stringRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-		NSRange colorRange = [result range];
-		if (selectedRange.location >= colorRange.location + 1 && NSMaxRange(selectedRange) <= NSMaxRange(colorRange) - 1) {
-			foundStringContent = [text substringWithRange:[result rangeAtIndex:0]];
-			colorRange.location++;
-			colorRange.length -= 2;
-			foundColorRange = colorRange;
-			*stop = YES;
-		}
-	}];
+    __block NSString *foundStringContent = nil;
+    __block NSRange foundColorRange = NSMakeRange(NSNotFound, 0);
+    [_stringRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        NSRange colorRange = [result range];
+        if (selectedRange.location >= colorRange.location + 1 && NSMaxRange(selectedRange) <= NSMaxRange(colorRange) - 1) {
+            foundStringContent = [text substringWithRange:[result rangeAtIndex:0]];
+            colorRange.location++;
+            colorRange.length -= 2;
+            foundColorRange = colorRange;
+            *stop = YES;
+        }
+    }];
     if (foundStringContent) {
-		if (matchedRange != NULL) {
-			*matchedRange = foundColorRange;
-		}
-		return foundStringContent;
-	}
+        if (matchedRange != NULL) {
+            *matchedRange = foundColorRange;
+        }
+        return foundStringContent;
+    }
     return nil;
 }
 
 #pragma mark -
 
 - (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self dismissPopover];
 }
 
