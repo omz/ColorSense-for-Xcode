@@ -299,7 +299,7 @@
         result = [self escapeString:result];
         if(![result isEqualToString:_selectedStringContent]) {
             [self.textView.undoManager beginUndoGrouping];
-            [self.textView insertText:[NSString stringWithFormat:@"\"%@\"", result]
+            [self.textView insertText:[NSString stringWithFormat:@"%@", result]
                      replacementRange:self.selectedStringRange];
             [self.textView.undoManager endUndoGrouping];
         }
