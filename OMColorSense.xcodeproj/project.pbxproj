@@ -149,7 +149,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /usr/bin/python;
-			shellScript = "import os\nimport plistlib\nimport subprocess\n\ncompat_uuid = subprocess.check_output(['defaults', 'read', '/Applications/Xcode.app/Contents/Info', 'DVTPlugInCompatibilityUUID']).strip()\n\ninfo_plist_path = os.path.join(os.getenv('BUILT_PRODUCTS_DIR'), 'OMColorSense.xcplugin/Contents/Info.plist')\ninfo =  plistlib.readPlist(info_plist_path)\ninfo['DVTPlugInCompatibilityUUIDs'] = [compat_uuid]\nplistlib.writePlist(info, info_plist_path)\n";
+			shellScript = "# Get the compatibility UUID from the current version of Xcode and update\n# the plugin's Info.plist accordingly:\n\nimport os\nimport plistlib\nimport subprocess\n\ndev_path = subprocess.check_output(['xcode-select', '-p']).strip()\nxcode_info_path = os.path.abspath(os.path.join(dev_path, '../Info'))\ncompat_uuid = subprocess.check_output(['defaults', 'read', xcode_info_path, 'DVTPlugInCompatibilityUUID']).strip()\ninfo_plist_path = os.path.join(os.getenv('BUILT_PRODUCTS_DIR'), 'OMColorSense.xcplugin/Contents/Info.plist')\ninfo =  plistlib.readPlist(info_plist_path)\ninfo['DVTPlugInCompatibilityUUIDs'] = [compat_uuid]\nplistlib.writePlist(info, info_plist_path)\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
