@@ -96,6 +96,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "OMColorSense" */;
 			buildPhases = (
+				7F1DE9FB1B10AF0900B6CBA8 /* ShellScript */,
 				8D5B49B1048680CD000E48DA /* Sources */,
 				8D5B49B3048680CD000E48DA /* Frameworks */,
 			);
@@ -135,6 +136,22 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7F1DE9FB1B10AF0900B6CBA8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /usr/bin/python;
+			shellScript = "import os\nimport plistlib\nimport subprocess\n\ncompat_uuid = subprocess.check_output(['defaults', 'read', '/Applications/Xcode.app/Contents/Info', 'DVTPlugInCompatibilityUUID']).strip()\n\ninfo_plist_path = os.path.join(os.getenv('BUILT_PRODUCTS_DIR'), 'OMColorSense.xcplugin/Contents/Info.plist')\ninfo =  plistlib.readPlist(info_plist_path)\ninfo['DVTPlugInCompatibilityUUIDs'] = [compat_uuid]\nplistlib.writePlist(info, info_plist_path)\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D5B49B1048680CD000E48DA /* Sources */ = {
