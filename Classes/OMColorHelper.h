@@ -23,10 +23,17 @@ typedef enum OMColorType {
 	OMColorTypeNSWhiteCalibrated,	//[NSColor colorWithCalibratedWhite:0.5 alpha:1.0]
 	OMColorTypeNSWhiteDevice,		//[NSColor colorWithDeviceWhite:0.5 alpha:1.0]
 	OMColorTypeNSConstant,			//[NSColor redColor]
+    
+    OMColorTypeSKRGBA,              //[SKColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0]
+    OMColorTypeSKRGBAInit,			//[[SKColor alloc] initWithRed:1.0 green:0.0 blue:0.0 alpha:1.0]
+    OMColorTypeSKWhite,				//[SKColor colorWithWhite:0.5 alpha:1.0]
+    OMColorTypeSKWhiteInit,			//[[SKColor alloc] initWithWhite:0.5 alpha:1.0]
+    OMColorTypeSKConstant,          //[SKColor redColor]
 	
 } OMColorType;
 
-BOOL OMColorTypeIsNSColor(OMColorType colorType) { return colorType >= OMColorTypeNSRGBACalibrated; }
+BOOL OMColorTypeIsNSColor(OMColorType colorType) { return colorType >= OMColorTypeNSRGBACalibrated && colorType <= OMColorTypeNSConstant; }
+BOOL OMColorTypeIsSKColor(OMColorType colorType) { return colorType >= OMColorTypeSKRGBA; }
 
 //TODO: Maybe support HSB and CMYK color types...
 
@@ -43,8 +50,10 @@ BOOL OMColorTypeIsNSColor(OMColorType colorType) { return colorType >= OMColorTy
 	
 	NSRegularExpression *_rgbaUIColorRegex;
 	NSRegularExpression *_rgbaNSColorRegex;
+    NSRegularExpression *_rgbaSKColorRegex;
 	NSRegularExpression *_whiteNSColorRegex;
 	NSRegularExpression *_whiteUIColorRegex;
+    NSRegularExpression *_whiteSKColorRegex;
 	NSRegularExpression *_constantColorRegex;
 }
 
