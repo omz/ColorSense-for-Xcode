@@ -15,7 +15,10 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
 	[self.color setStroke];
-	[NSBezierPath strokeRect:NSInsetRect(self.bounds, 0.5, 0.5)];
+    CGFloat dash[2] = { 2, 2 };
+    NSBezierPath *path = [NSBezierPath bezierPathWithRect:NSInsetRect(self.bounds, 0.5, 0.5)];
+    [path setLineDash:dash count:2 phase:0];
+    [path stroke];
 }
 
 - (void)setColor:(NSColor *)color
