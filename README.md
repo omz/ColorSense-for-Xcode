@@ -2,7 +2,7 @@
 
 ## Overview
 
-ColorSense is an Xcode plugin that makes working with `UIColor` (and `NSColor`) more visual.
+ColorSense is an Xcode plugin that makes working with `UIColor` (and `NSColor` and `CCColor`) more visual.
 
 There are [many](http://www.colorchooserapp.com) [tools](http://iconfactory.com/software/xscope) that allow you to insert a `UIColor`/`NSColor` from a color picker or by picking a color from the screen. But once you've inserted it, it can be hard to remember which color you're actually looking at in your code because you basically just have a series of numbers.
 

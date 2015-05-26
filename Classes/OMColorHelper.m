@@ -50,11 +50,11 @@
 								 [NSColor brownColor], @"brown",
 								 [[NSColor clearColor] colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]], @"clear", nil];
 		
-		_rgbaUIColorRegex = [NSRegularExpression regularExpressionWithPattern:@"(\\[\\s*UIColor\\s+colorWith|\\[\\s*\\[\\s*UIColor\\s+alloc\\]\\s*initWith)Red:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+green:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+blue:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL];
-		_whiteUIColorRegex = [NSRegularExpression regularExpressionWithPattern:@"(\\[\\s*UIColor\\s+colorWith|\\[\\s*\\[\\s*UIColor\\s+alloc\\]\\s*initWith)White:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL];
+		_rgbaUIColorRegex = [NSRegularExpression regularExpressionWithPattern:@"(\\[\\s*(?:UI|CC)Color\\s+colorWith|\\[\\s*\\[\\s*(?:UI|CC)Color\\s+alloc\\]\\s*initWith)Red:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+green:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+blue:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL];
+		_whiteUIColorRegex = [NSRegularExpression regularExpressionWithPattern:@"(\\[\\s*(?:UI|CC)Color\\s+colorWith|\\[\\s*\\[\\s*(?:UI|CC)Color\\s+alloc\\]\\s*initWith)White:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL];
 		_rgbaNSColorRegex = [NSRegularExpression regularExpressionWithPattern:@"\\[\\s*NSColor\\s+colorWith(Calibrated|Device)Red:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+green:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+blue:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL];
 		_whiteNSColorRegex = [NSRegularExpression regularExpressionWithPattern:@"\\[\\s*NSColor\\s+colorWith(Calibrated|Device)White:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s+alpha:\\s*([0-9]*\\.?[0-9]*f?)\\s*(\\/\\s*[0-9]*\\.?[0-9]*f?)?\\s*\\]" options:0 error:NULL];
-		_constantColorRegex = [NSRegularExpression regularExpressionWithPattern:@"\\[\\s*(UI|NS)Color\\s+(black|darkGray|lightGray|white|gray|red|green|blue|cyan|yellow|magenta|orange|purple|brown|clear)Color\\s*\\]" options:0 error:NULL];
+		_constantColorRegex = [NSRegularExpression regularExpressionWithPattern:@"\\[\\s*(UI|NS|CC)Color\\s+(black|darkGray|lightGray|white|gray|red|green|blue|cyan|yellow|magenta|orange|purple|brown|clear)Color\\s*\\]" options:0 error:NULL];
 	}
 	return self;
 }
@@ -300,12 +300,13 @@
 	[_rgbaUIColorRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 		NSRange colorRange = [result range];
 		if (selectedRange.location >= colorRange.location && NSMaxRange(selectedRange) <= NSMaxRange(colorRange)) {
-			NSString *typeIndicator = [text substringWithRange:[result rangeAtIndex:1]];
-			if ([typeIndicator rangeOfString:@"init"].location != NSNotFound) {
-				foundColorType = OMColorTypeUIRGBAInit;
-			} else {
-				foundColorType = OMColorTypeUIRGBA;
-			}
+            NSString *typeIndicator = [text substringWithRange:[result rangeAtIndex:1]];
+            BOOL UI_Prefix = [typeIndicator rangeOfString:@"UI"].location != NSNotFound;
+            if ([typeIndicator rangeOfString:@"init"].location != NSNotFound) {
+                foundColorType = (UI_Prefix ? OMColorTypeUIRGBAInit : OMColorTypeCCRGBAInit);
+            } else {
+                foundColorType = (UI_Prefix ? OMColorTypeUIRGBA : OMColorTypeCCRGBA);
+            }
 			
 			// [UIColor colorWithRed:128 / 255.0 green:10 / 255 blue:123/255 alpha:128 /255]
 			
@@ -331,12 +332,14 @@
 		[_whiteUIColorRegex enumerateMatchesInString:text options:0 range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
 			NSRange colorRange = [result range];
 			if (selectedRange.location >= colorRange.location && NSMaxRange(selectedRange) <= NSMaxRange(colorRange)) {
-				NSString *typeIndicator = [text substringWithRange:[result rangeAtIndex:1]];
-				if ([typeIndicator rangeOfString:@"init"].location != NSNotFound) {
-					foundColorType = OMColorTypeUIWhiteInit;
-				} else {
-					foundColorType = OMColorTypeUIWhite;
-				}
+                NSString *typeIndicator = [text substringWithRange:[result rangeAtIndex:1]];
+                BOOL UI_Prefix = [typeIndicator rangeOfString:@"UI"].location != NSNotFound;
+                if ([typeIndicator rangeOfString:@"init"].location != NSNotFound) {
+                    foundColorType = (UI_Prefix ? OMColorTypeUIWhiteInit : OMColorTypeCCWhiteInit);
+                } else {
+                    foundColorType = (UI_Prefix ? OMColorTypeUIWhite : OMColorTypeCCWhite);
+                }
+
 				double white = [[text substringWithRange:[result rangeAtIndex:2]] doubleValue];
 				white = [self dividedValue:white withDivisorRange:[result rangeAtIndex:3] inString:text];
 				
@@ -360,9 +363,11 @@
 				foundColorRange = colorRange;
 				if ([NS_UI isEqualToString:@"UI"]) {
 					foundColorType = OMColorTypeUIConstant;
-				} else {
+				} else if ([NS_UI isEqualToString:@"NS"]) {
 					foundColorType = OMColorTypeNSConstant;
-				}
+                } else {
+                    foundColorType = OMColorTypeCCConstant;
+                }
 				*stop = YES;
 			}
 		}];
@@ -462,9 +467,11 @@
 			if ([constantColor isEqual:color]) {
 				if (OMColorTypeIsNSColor(colorType)) {
 					colorString = [NSString stringWithFormat:@"[NSColor %@Color]", colorName];
-				} else {
+				} else if (OMColorTypeIsUIColor(colorType)) {
 					colorString = [NSString stringWithFormat:@"[UIColor %@Color]", colorName];
-				}
+                } else {
+                    colorString = [NSString stringWithFormat:@"[CCColor %@Color]", colorName];
+                }
 				break;
 			}
 		}
@@ -479,7 +486,11 @@
 					colorString = [NSString stringWithFormat:@"[NSColor colorWithCalibratedWhite:%.3f alpha:%.3f]", red, alpha];
 				} else if (colorType == OMColorTypeNSRGBADevice || colorType == OMColorTypeNSWhiteDevice) {
 					colorString = [NSString stringWithFormat:@"[NSColor colorWithDeviceWhite:%.3f alpha:%.3f]", red, alpha];
-				}
+                } else if (colorType == OMColorTypeCCConstant || colorType == OMColorTypeCCRGBA || colorType == OMColorTypeCCWhite) {
+                    colorString = [NSString stringWithFormat:@"[CCColor colorWithWhite:%.3f alpha:%.3f]", red, alpha];
+                } else if (colorType == OMColorTypeCCRGBAInit || colorType == OMColorTypeCCWhiteInit) {
+                    colorString = [NSString stringWithFormat:@"[[CCColor alloc] initWithWhite:%.3f alpha:%.3f]", red, alpha];
+                }
 			} else {
 				if (colorType == OMColorTypeUIRGBA || colorType == OMColorTypeUIWhite || colorType == OMColorTypeUIConstant) {
 					colorString = [NSString stringWithFormat:@"[UIColor colorWithRed:%.3f green:%.3f blue:%.3f alpha:%.3f]", red, green, blue, alpha];
@@ -490,7 +501,13 @@
 					colorString = [NSString stringWithFormat:@"[NSColor colorWithCalibratedRed:%.3f green:%.3f blue:%.3f alpha:%.3f]", red, green, blue, alpha];
 				} else if (colorType == OMColorTypeNSRGBADevice || colorType == OMColorTypeNSWhiteDevice) {
 					colorString = [NSString stringWithFormat:@"[NSColor colorWithDeviceRed:%.3f green:%.3f blue:%.3f alpha:%.3f]", red, green, blue, alpha];
-				}
+                } else if (colorType == OMColorTypeCCConstant || colorType == OMColorTypeCCRGBA || colorType == OMColorTypeCCWhite) {
+                    colorString = [NSString stringWithFormat:@"[CCColor colorWithRed:%.3f green:%.3f blue:%.3f alpha:%.3f]", red, green, blue, alpha];
+                    
+                } else if (colorType == OMColorTypeCCRGBAInit || colorType == OMColorTypeCCWhiteInit) {
+                    colorString = [NSString stringWithFormat:@"[[CCColor alloc] initWithRed:%.3f green:%.3f blue:%.3f alpha:%.3f]", red, green, blue, alpha];
+                }
+
 			}
 		}
 	}
