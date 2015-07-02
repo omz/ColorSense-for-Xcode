@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>E822DE2D-8AFB-45D6-B909-ED96F189E2AE</string>
 	<key>IDESourceControlProjectName</key>
-	<string>HOStringSense</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>F05946858516928A212830FAEE4FD23BEA3A31AB</key>
 		<string>github.com:holtwick/HOStringSense-for-Xcode.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>HOStringSense.xcodeproj</string>
+	<string>HOStringSense.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>F05946858516928A212830FAEE4FD23BEA3A31AB</key>
