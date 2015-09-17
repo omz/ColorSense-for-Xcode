@@ -7,15 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		435286B71677D87200A7E837 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435286B61677D87200A7E837 /* SenTestingKit.framework */; };
-		435286B91677D87200A7E837 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435286B81677D87200A7E837 /* Cocoa.framework */; };
-		435286C31677D87200A7E837 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 435286C11677D87200A7E837 /* InfoPlist.strings */; };
-		435286C61677D87200A7E837 /* HOStringSenseUnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 435286C51677D87200A7E837 /* HOStringSenseUnitTests.m */; };
 		43BA8625167490550002C238 /* HOPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43BA8624167490550002C238 /* HOPopoverViewController.m */; };
-		43F5A61C1677DA71009C8ABE /* HOStringHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA37E2DB0E6291C8001BDFEF /* HOStringHelper.m */; };
-		43F5A61D1677DA71009C8ABE /* HOStringFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6EE2BE15FA6F3B00BA114A /* HOStringFrameView.m */; };
-		43F5A61E1677DA71009C8ABE /* HOStringInfoButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FDADE3915FA6CA400A847E3 /* HOStringInfoButton.m */; };
-		43F5A61F1677DA71009C8ABE /* HOPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43BA8624167490550002C238 /* HOPopoverViewController.m */; };
 		7F2EB89C145057F200E97A87 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2EB899145057EA00E97A87 /* AppKit.framework */; };
 		7F6EE2BF15FA6F3B00BA114A /* HOStringFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6EE2BE15FA6F3B00BA114A /* HOStringFrameView.m */; };
 		7FDADE3A15FA6CA400A847E3 /* HOStringInfoButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FDADE3915FA6CA400A847E3 /* HOStringInfoButton.m */; };
@@ -37,17 +29,6 @@
 
 /* Begin PBXFileReference section */
 		089C1672FE841209C02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		435286B41677D87200A7E837 /* HOStringSenseUnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HOStringSenseUnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		435286B61677D87200A7E837 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		435286B81677D87200A7E837 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-		435286BB1677D87200A7E837 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		435286BC1677D87200A7E837 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		435286BD1677D87200A7E837 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		435286C01677D87200A7E837 /* HOStringSenseUnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HOStringSenseUnitTests-Info.plist"; sourceTree = "<group>"; };
-		435286C21677D87200A7E837 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		435286C41677D87200A7E837 /* HOStringSenseUnitTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HOStringSenseUnitTests.h; sourceTree = "<group>"; };
-		435286C51677D87200A7E837 /* HOStringSenseUnitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HOStringSenseUnitTests.m; sourceTree = "<group>"; };
-		435286C71677D87200A7E837 /* HOStringSenseUnitTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HOStringSenseUnitTests-Prefix.pch"; sourceTree = "<group>"; };
 		43BA8623167490550002C238 /* HOPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HOPopoverViewController.h; sourceTree = "<group>"; };
 		43BA8624167490550002C238 /* HOPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HOPopoverViewController.m; sourceTree = "<group>"; };
 		43ED5411167509CC00AE1269 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
@@ -63,15 +44,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		435286B01677D87200A7E837 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				435286B71677D87200A7E837 /* SenTestingKit.framework in Frameworks */,
-				435286B91677D87200A7E837 /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8D5B49B3048680CD000E48DA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -91,8 +63,6 @@
 				7F411B0C15FABAC6002F77B6 /* Classes */,
 				089C167CFE841241C02AAC07 /* Resources */,
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
-				435286BE1677D87200A7E837 /* HOStringSenseUnitTests */,
-				435286B51677D87200A7E837 /* Frameworks */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
 			);
 			indentWidth = 4;
@@ -120,49 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				8D5B49B6048680CD000E48DA /* HOStringSense.xcplugin */,
-				435286B41677D87200A7E837 /* HOStringSenseUnitTests.octest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		435286B51677D87200A7E837 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				435286B61677D87200A7E837 /* SenTestingKit.framework */,
-				435286B81677D87200A7E837 /* Cocoa.framework */,
-				435286BA1677D87200A7E837 /* Other Frameworks */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		435286BA1677D87200A7E837 /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				435286BB1677D87200A7E837 /* AppKit.framework */,
-				435286BC1677D87200A7E837 /* CoreData.framework */,
-				435286BD1677D87200A7E837 /* Foundation.framework */,
-			);
-			name = "Other Frameworks";
-			sourceTree = "<group>";
-		};
-		435286BE1677D87200A7E837 /* HOStringSenseUnitTests */ = {
-			isa = PBXGroup;
-			children = (
-				435286C41677D87200A7E837 /* HOStringSenseUnitTests.h */,
-				435286C51677D87200A7E837 /* HOStringSenseUnitTests.m */,
-				435286BF1677D87200A7E837 /* Supporting Files */,
-			);
-			path = HOStringSenseUnitTests;
-			sourceTree = "<group>";
-		};
-		435286BF1677D87200A7E837 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				435286C01677D87200A7E837 /* HOStringSenseUnitTests-Info.plist */,
-				435286C11677D87200A7E837 /* InfoPlist.strings */,
-				435286C71677D87200A7E837 /* HOStringSenseUnitTests-Prefix.pch */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		7F411B0C15FABAC6002F77B6 /* Classes */ = {
@@ -183,24 +112,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		435286B31677D87200A7E837 /* HOStringSenseUnitTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 435286C91677D87200A7E837 /* Build configuration list for PBXNativeTarget "HOStringSenseUnitTests" */;
-			buildPhases = (
-				435286AF1677D87200A7E837 /* Sources */,
-				435286B01677D87200A7E837 /* Frameworks */,
-				435286B11677D87200A7E837 /* Resources */,
-				435286B21677D87200A7E837 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = HOStringSenseUnitTests;
-			productName = HOStringSenseUnitTests;
-			productReference = 435286B41677D87200A7E837 /* HOStringSenseUnitTests.octest */;
-			productType = "com.apple.product-type.bundle.ocunit-test";
-		};
 		8D5B49AC048680CD000E48DA /* HOStringSense */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "HOStringSense" */;
@@ -245,7 +156,6 @@
 			projectRoot = "";
 			targets = (
 				8D5B49AC048680CD000E48DA /* HOStringSense */,
-				435286B31677D87200A7E837 /* HOStringSenseUnitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,45 +168,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		435286B11677D87200A7E837 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				435286C31677D87200A7E837 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		435286B21677D87200A7E837 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
-		435286AF1677D87200A7E837 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				435286C61677D87200A7E837 /* HOStringSenseUnitTests.m in Sources */,
-				43F5A61C1677DA71009C8ABE /* HOStringHelper.m in Sources */,
-				43F5A61D1677DA71009C8ABE /* HOStringFrameView.m in Sources */,
-				43F5A61E1677DA71009C8ABE /* HOStringInfoButton.m in Sources */,
-				43F5A61F1677DA71009C8ABE /* HOPopoverViewController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8D5B49B1048680CD000E48DA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -309,17 +183,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		435286C11677D87200A7E837 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				435286C21677D87200A7E837 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB913B08733D840010E9CD /* Debug */ = {
@@ -362,38 +225,6 @@
 			};
 			name = Debug;
 		};
-		435286C81677D87200A7E837 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "HOStringSenseUnitTests/HOStringSenseUnitTests-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "HOStringSenseUnitTests/HOStringSenseUnitTests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "it.holtwick.mac.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -409,14 +240,6 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB913F08733D840010E9CD /* Debug */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		435286C91677D87200A7E837 /* Build configuration list for PBXNativeTarget "HOStringSenseUnitTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				435286C81677D87200A7E837 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
