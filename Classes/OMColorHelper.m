@@ -224,7 +224,7 @@
 				self.colorWell.strokeColor = strokeColor;
 				
 				self.selectedColorRange = NSMakeRange(colorRange.location + lineRange.location, colorRange.length);
-				NSRect selectionRectOnScreen = [self.textView firstRectForCharacterRange:self.selectedColorRange];
+        NSRect selectionRectOnScreen = [self.textView firstRectForCharacterRange:self.selectedColorRange actualRange:nil];
 				NSRect selectionRectInWindow = [self.textView.window convertRectFromScreen:selectionRectOnScreen];
 				NSRect selectionRectInView = [self.textView convertRect:selectionRectInWindow fromView:nil];
 				NSRect colorWellRect = NSMakeRect(NSMaxX(selectionRectInView) - 49, NSMinY(selectionRectInView) - selectionRectInView.size.height - 2, 50, selectionRectInView.size.height + 2);
