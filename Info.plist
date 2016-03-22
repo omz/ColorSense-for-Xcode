@@ -20,6 +20,7 @@
 	<string>${CURRENT_PROJECT_VERSION}</string>
 	<key>DVTPlugInCompatibilityUUIDs</key>
 	<array>
+		<string>ACA8656B-FEA8-4B6D-8E4A-93F4C95C362C</string>
 		<string>AD68E85B-441B-4301-B564-A45E4919A6AD</string>
 		<string>A2E4D43F-41F4-4FB9-BB94-7177011C9AED</string>
 		<string>640F884E-CE55-4B40-87C0-8869546CAB7A</string>
