@@ -13,6 +13,12 @@
 #define kOMColorHelperHighlightingDisabled	@"OMColorHelperHighlightingDisabled"
 #define kOMColorHelperInsertionMode			@"OMColorHelperInsertionMode"
 
+@interface OMColorHelper ()
+
+- (NSString *)descriptionForColorValue:(CGFloat)value;
+
+@end
+
 @implementation OMColorHelper
 
 @synthesize colorWell=_colorWell, colorFrameView=_colorFrameView, textView=_textView, selectedColorRange=_selectedColorRange, selectedColorType=_selectedColorType;
@@ -176,9 +182,9 @@
 	[self.textView.undoManager beginUndoGrouping];
 	NSInteger insertionMode = [[NSUserDefaults standardUserDefaults] integerForKey:kOMColorHelperInsertionMode];
 	if (insertionMode == 0) {
-		[self.textView insertText:@"[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0]" replacementRange:self.textView.selectedRange];
+		[self.textView insertText:@"[UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:1.0f]" replacementRange:self.textView.selectedRange];
 	} else {
-		[self.textView insertText:@"[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0]" replacementRange:self.textView.selectedRange];
+		[self.textView insertText:@"[NSColor colorWithCalibratedRed:1.0f green:0.0f blue:0.0f alpha:1.0f]" replacementRange:self.textView.selectedRange];
 	}
 	[self.textView.undoManager endUndoGrouping];
 	[self performSelector:@selector(activateColorWell) withObject:nil afterDelay:0.0];
@@ -469,32 +475,53 @@
 			}
 		}
 		if (!colorString) {
+			NSString *redValue = [self descriptionForColorValue:red];
+			NSString *alphaValue = [self descriptionForColorValue:alpha];
+            
 			if (fabs(red - green) < 0.001 && fabs(green - blue) < 0.001) {
 				if (colorType == OMColorTypeUIRGBA || colorType == OMColorTypeUIWhite || colorType == OMColorTypeUIConstant) {
-					colorString = [NSString stringWithFormat:@"[UIColor colorWithWhite:%.3f alpha:%.3f]", red, alpha];
+					colorString = [NSString stringWithFormat:@"[UIColor colorWithWhite:%@ alpha:%@]", redValue, alphaValue];
 				} else if (colorType == OMColorTypeUIRGBAInit || colorType == OMColorTypeUIWhiteInit) {
-					colorString = [NSString stringWithFormat:@"[[UIColor alloc] initWithWhite:%.3f alpha:%.3f]", red, alpha];
+					colorString = [NSString stringWithFormat:@"[[UIColor alloc] initWithWhite:%@ alpha:%@]", redValue, alphaValue];
 				}
 				else if (colorType == OMColorTypeNSConstant || colorType == OMColorTypeNSRGBACalibrated || colorType == OMColorTypeNSWhiteCalibrated) {
-					colorString = [NSString stringWithFormat:@"[NSColor colorWithCalibratedWhite:%.3f alpha:%.3f]", red, alpha];
+					colorString = [NSString stringWithFormat:@"[NSColor colorWithCalibratedWhite:%@ alpha:%@]", redValue, alphaValue];
 				} else if (colorType == OMColorTypeNSRGBADevice || colorType == OMColorTypeNSWhiteDevice) {
-					colorString = [NSString stringWithFormat:@"[NSColor colorWithDeviceWhite:%.3f alpha:%.3f]", red, alpha];
+					colorString = [NSString stringWithFormat:@"[NSColor colorWithDeviceWhite:%@ alpha:%@]", redValue, alphaValue];
 				}
 			} else {
+				NSString *greenValue = [self descriptionForColorValue:green];
+				NSString *blueValue = [self descriptionForColorValue:blue];
+                                
 				if (colorType == OMColorTypeUIRGBA || colorType == OMColorTypeUIWhite || colorType == OMColorTypeUIConstant) {
-					colorString = [NSString stringWithFormat:@"[UIColor colorWithRed:%.3f green:%.3f blue:%.3f alpha:%.3f]", red, green, blue, alpha];
+					colorString = [NSString stringWithFormat:@"[UIColor colorWithRed:%@ green:%@ blue:%@ alpha:%@]", redValue, greenValue, blueValue, alphaValue];
 				} else if (colorType == OMColorTypeUIRGBAInit || colorType == OMColorTypeUIWhiteInit) {
-					colorString = [NSString stringWithFormat:@"[[UIColor alloc] initWithRed:%.3f green:%.3f blue:%.3f alpha:%.3f]", red, green, blue, alpha];
+					colorString = [NSString stringWithFormat:@"[[UIColor alloc] initWithRed:%@ green:%@ blue:%@ alpha:%@]", redValue, greenValue, blueValue, alphaValue];
 				}
 				else if (colorType == OMColorTypeNSConstant || colorType == OMColorTypeNSRGBACalibrated || colorType == OMColorTypeNSWhiteCalibrated) {
-					colorString = [NSString stringWithFormat:@"[NSColor colorWithCalibratedRed:%.3f green:%.3f blue:%.3f alpha:%.3f]", red, green, blue, alpha];
+					colorString = [NSString stringWithFormat:@"[NSColor colorWithCalibratedRed:%@ green:%@ blue:%@ alpha:%@]", redValue, greenValue, blueValue, alphaValue];
 				} else if (colorType == OMColorTypeNSRGBADevice || colorType == OMColorTypeNSWhiteDevice) {
-					colorString = [NSString stringWithFormat:@"[NSColor colorWithDeviceRed:%.3f green:%.3f blue:%.3f alpha:%.3f]", red, green, blue, alpha];
+					colorString = [NSString stringWithFormat:@"[NSColor colorWithDeviceRed:%@ green:%@ blue:%@ alpha:%@]", redValue, greenValue, blueValue, alphaValue];
 				}
 			}
 		}
 	}
 	return colorString;
+}
+
+#pragma mark - Private Methods
+
+- (NSString *)descriptionForColorValue:(CGFloat)value
+{
+    NSString *format;
+    
+    if (value == 0.0f || value == 1.0f) {
+        format = @"%.1ff";
+    } else {
+        format = @"%.2ff";
+    }
+
+    return [NSString stringWithFormat:format, value];
 }
 
 #pragma mark -
